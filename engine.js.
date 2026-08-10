@@ -12,309 +12,455 @@ const URL_MAP = {
 };
 
 let audioCtx = null;
-function playClick() { try { if(!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } if (audioCtx.state === 'suspended') { audioCtx.resume(); } const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = "triangle"; osc.frequency.setValueAtTime(650, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.04); gain.gain.setValueAtTime(0.06, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.04); } catch(e){} }
-function playSuccessSound() { try { if(!audioCtx) return; const now = audioCtx.currentTime; const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(880, now); osc.frequency.linearRampToValueAtTime(1760, now + 0.12); gain.gain.setValueAtTime(0.04, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.12); } catch(e){} }
 
-let titleTapCount = 0; let titleTapTimer = null;
-function handleTitleTap() { titleTapCount++; if (titleTapCount === 3) { document.getElementById('secretHistoryPanel').classList.toggle('hidden'); titleTapCount = 0; } clearTimeout(titleTapTimer); titleTapTimer = setTimeout(() => { titleTapCount = 0; }, 1000); }
-
-function toggleDir(type) { 
-    currentMode = type; 
-    ['global', 'india', 'bd', 'eu'].forEach(d => { 
-        let btn = document.getElementById(`dir-${d}`);
-        if(btn) btn.className = d === type ? "dir-btn flex-1 bg-emerald-600 text-white text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer uppercase shadow-md shadow-emerald-500/20" : "dir-btn flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 uppercase"; 
-    }); 
-    evaluateMonthSelectState(); 
+function playClick() {
+    try {
+        if(!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+        const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+        osc.type = "triangle"; osc.frequency.setValueAtTime(650, audioCtx.currentTime); 
+        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+        osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.04);
+    } catch(e){}
 }
 
-function selectCategory(category, element) { 
-    currentSelectedCategory = category; 
-    document.querySelectorAll('.cat-btn').forEach(btn => btn.className = "cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all"); 
-    element.className = "cat-btn bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all"; 
-    evaluateMonthSelectState(); 
+function playSuccessSound() {
+    try {
+        if(!audioCtx) return;
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+        osc.type = "sine"; 
+        osc.frequency.setValueAtTime(880, now); 
+        osc.frequency.linearRampToValueAtTime(1760, now + 0.12);
+        gain.gain.setValueAtTime(0.04, now); 
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12); 
+        osc.connect(gain); gain.connect(audioCtx.destination); 
+        osc.start(now); osc.stop(now + 0.12);
+    } catch(e){}
 }
 
-function evaluateMonthSelectState() { const monthDropdown = document.getElementById('monthCodeInput'); if ((currentSelectedCategory === 'TOPUP' || currentSelectedCategory === 'FE' || currentMode === 'bd') && currentSelectedCategory !== 'STORE') { monthDropdown.disabled = true; } else { monthDropdown.disabled = false; } }
-
-function getActiveKeywords(selectedMonth) { let list = []; if (currentSelectedCategory === 'all' || currentSelectedCategory === 'TOPUP') list.push("TopUp"); if (currentSelectedCategory === 'all' || currentSelectedCategory === 'FE') list.push("FreeEvent"); if (currentSelectedCategory === 'all' || currentSelectedCategory === 'O') { if (currentMode === 'eu') { for(let i=1; i<=7; i++) { list.push(`O${i}`); list.push(`OT${i}`); } } else if (selectedMonth === "AUG" || selectedMonth === "JUL" || selectedMonth === "JUN") { for(let i=1; i<=7; i++) list.push(`OT${i}`); } else { for(let i=1; i<=7; i++) list.push(`O${i}`); } } if (currentSelectedCategory === 'all' || currentSelectedCategory === 'TW') for(let i=1; i<=7; i++) list.push(`TW${i}`); if (currentSelectedCategory === 'all' || currentSelectedCategory === 'TT') for(let i=1; i<=7; i++) list.push(`TT${i}`); if (currentSelectedCategory === 'all' || currentSelectedCategory === 'FW') for(let i=1; i<=7; i++) list.push(`FW${i}`); if (currentSelectedCategory === 'all' || currentSelectedCategory === 'DW') for(let i=1; i<=7; i++) list.push(`DW${i}`); if (currentSelectedCategory === 'all' || currentSelectedCategory === 'SPLASH') list.push("SPLASH", "BANNER", "EVO"); if (currentSelectedCategory === 'all' || currentSelectedCategory === 'RM') list.push("RelayMart"); return list; }
-function getActiveSuffixes(keyword) { if (currentMode === 'eu') { return [ { suffix: "_Tab_EU_en.jpg", label: "TAB (EU)" }, { suffix: "_Poster_EU_en.png", label: "POSTER (EU)" }, { suffix: "_Title_EU_en.png", label: "TITLE (EU)" }, { suffix: "_LobbyBG_EU_en.jpg", label: "LOBBY BG (EU)" }, { suffix: "_WheelBG_EU_en.png", label: "WHEEL BG (EU)" }, { suffix: "_en.png", label: "ASSET (PNG)" } ]; } let formats = [ { suffix: "_Tab_SG_en.jpg", label: "TAB (SG)" }, { suffix: "_Poster_SG_en.png", label: "POSTER (PNG)" }, { suffix: "_Title_SG_en.png", label: "TITLE PNG" } ]; if (keyword.startsWith("TW") || keyword.startsWith("TT") || keyword.startsWith("FW") || keyword.startsWith("O") || keyword.startsWith("MS") || keyword.startsWith("OT")) { formats.push({ suffix: "_LobbyBG_SG_en.jpg", label: "LOBBY BG" }); formats.push({ suffix: "_WheelBG_SG_en.png", label: "WHEEL BG" }); } return formats; }
-
-function saveSearchLog(keyword, foundCount) { let history = JSON.parse(localStorage.getItem('ff_assets_finder_logs') || "[]"); const newLog = { keyword: keyword, server: currentMode.toUpperCase(), category: currentSelectedCategory.toUpperCase(), found: foundCount, time: new Date().toLocaleTimeString() }; history.unshift(newLog); if(history.length > 30) history.pop(); localStorage.setItem('ff_assets_finder_logs', JSON.stringify(history)); renderHistoryLogs(); }
-function renderHistoryLogs() { const container = document.getElementById('historyLogsContainer'); if(!container) return; let history = JSON.parse(localStorage.getItem('ff_assets_finder_logs') || "[]"); if(history.length === 0) { container.innerHTML = `<div class="text-gray-600 text-center py-2">No scans executed yet.</div>`; return; } container.innerHTML = history.map(log => { const statusColor = log.found > 0 ? 'text-emerald-400' : 'text-red-500'; return `<div class="flex items-center justify-between border-b border-emerald-950/40 pb-1.5 pt-0.5"><div class="flex items-center gap-1.5 truncate"><span class="text-emerald-500 font-bold">[${log.server}]</span><span class="text-white font-medium truncate" title="${log.keyword}">${log.keyword}</span></div><div class="flex items-center gap-2 shrink-0"><span class="text-gray-500">${log.time}</span><span class="font-black ${statusColor}">(${log.found} FOUND)</span></div></div>`; }).join(''); }
-function clearSearchHistory() { localStorage.setItem('ff_assets_finder_logs', '[]'); renderHistoryLogs(); }
-
-function openImagePreview(url, name) { document.getElementById('lightboxImage').src = url; document.getElementById('lightboxTitle').innerText = name; document.getElementById('lightboxDownloadBtn').href = url; document.getElementById('lightboxCopyBtn').setAttribute('data-url', url); document.getElementById('lightboxCopyBtn').innerText = "COPY URL"; document.getElementById('imageLightbox').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
-function closeImagePreview() { document.getElementById('imageLightbox').classList.add('hidden'); document.body.style.overflow = ''; }
-function copyToClipboard(text, btnElement) { navigator.clipboard.writeText(text).then(() => { const oldText = btnElement.innerText; btnElement.innerText = "COPIED!"; setTimeout(() => { btnElement.innerText = oldText; }, 1200); }).catch(err => { alert("Failed to copy link."); }); }
-
-function injectCard(gridElement, url, name, tagText) { 
-    let colorMap = { "TAB (SG)": "bg-emerald-600 text-white", "POSTER (PNG)": "bg-teal-600 text-white", "TOPUP DIRECT": "bg-emerald-400 text-black", "BD SPLASH": "bg-emerald-700 text-white", "LOBBY BG": "bg-teal-700 text-white", "WHEEL BG": "bg-emerald-500 text-white", "TITLE PNG": "bg-white text-black", "RM BANNER": "bg-emerald-500 text-white", "TAB (EU)": "bg-emerald-600 text-white", "LOBBY BG (EU)": "bg-teal-600 text-white", "POSTER (EU)": "bg-emerald-700 text-white", "TITLE (EU)": "bg-white text-black", "WHEEL BG (EU)": "bg-teal-600 text-white", "ASSET (PNG)": "bg-emerald-500 text-white", "FREE EVENT": "bg-teal-500 text-white", "STORE 1500": "bg-emerald-400 text-black", "STORE 252": "bg-teal-400 text-white", "MS SHOP ID": "bg-emerald-600 text-white", "MS BACKBG": "bg-teal-700 text-white", "MS CENTER BG": "bg-emerald-500 text-white", "MS BUNDLE 1A": "bg-teal-500 text-white", "MS BUNDLE 1B": "bg-emerald-500 text-white", "MS BUNDLE 2A": "bg-teal-500 text-white", "MS BUNDLE 2B": "bg-emerald-500 text-white", "MS BUNDLE 1V2": "bg-emerald-600 text-white", "MS BUNDLE 2V2": "bg-teal-600 text-white", "MS TAB": "bg-emerald-600 text-white", "MS POSTER": "bg-teal-600 text-white", "MS TITLE": "bg-white text-black", "MS LOBBY BG": "bg-emerald-700 text-white", "MS WHEEL BG": "bg-teal-500 text-white" }; 
-    let badgeClass = colorMap[tagText] || "bg-emerald-600 text-white"; 
-    
-    let cardHTML = `<div class="bg-[#030f09] border border-emerald-950/60 rounded-xl p-2 flex flex-col justify-between animate-fast hover:border-emerald-500/30 transition-all shadow-xl">
-        <div class="card-img-btn relative overflow-hidden rounded-lg bg-black mb-2 cursor-pointer group border border-neutral-900">
-            <img src="${url}" class="w-full h-24 object-cover transition-transform duration-200 group-hover:scale-105" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23020805%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2310b981%22 font-weight=%22bold%22 font-size=%229%22 font-family=%22monospace%22>ASSET DISCOVERED</text></svg>';">
-            <span class="absolute bottom-1 left-1 ${badgeClass} text-[7px] font-black px-1.5 py-0.5 rounded tracking-wide uppercase shadow-md">${tagText}</span>
-        </div>
-        <div class="text-[8px] font-mono text-gray-400 truncate mb-2 px-0.5" title="${name}">${name}</div>
-        <div class="flex gap-1">
-            <button class="card-open-btn flex-1 bg-emerald-950/20 hover:bg-emerald-600 text-emerald-400 hover:text-white py-1.5 rounded-lg transition border border-emerald-900/30 font-black text-[9px] uppercase tracking-wide">OPEN</button>
-            <button class="card-copy-btn flex-1 bg-[#030f09] border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 py-1.5 rounded-lg transition font-black text-[8px] uppercase tracking-wide">COPY LINK</button>
-        </div>
-    </div>`; 
-    
-    gridElement.insertAdjacentHTML('beforeend', cardHTML);
-    const addedCard = gridElement.lastElementChild;
-    addedCard.querySelector('.card-img-btn').addEventListener('click', () => openImagePreview(url, name));
-    addedCard.querySelector('.card-open-btn').addEventListener('click', () => openImagePreview(url, name));
-    addedCard.querySelector('.card-copy-btn').addEventListener('click', function() { copyToClipboard(url, this); });
+let titleTapCount = 0;
+let titleTapTimer = null;
+function handleTitleTap() {
+    titleTapCount++;
+    if (titleTapCount === 3) {
+        const historyPanel = document.getElementById('secretHistoryPanel');
+        historyPanel.classList.toggle('hidden');
+        titleTapCount = 0; 
+    }
+    clearTimeout(titleTapTimer);
+    titleTapTimer = setTimeout(() => { titleTapCount = 0; }, 1000);
 }
 
-async function startManualHyperScan(isHyperMode = false) { 
-    forceBreakScanner = false; 
-    let inputFieldVal = document.getElementById('searchInput').value.trim(); 
-    if (!inputFieldVal) return alert("Please enter the Event Keyword"); 
+function toggleDir(type) {
+    currentMode = type;
+    ['global', 'india', 'bd', 'eu'].forEach(d => {
+        document.getElementById(`dir-${d}`).className = d === type ? "flex-1 bg-emerald-600 text-white text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer uppercase shadow-md shadow-emerald-500/20" : "flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 uppercase";
+    });
+    evaluateMonthSelectState();
+}
+
+function selectCategory(category, element) {
+    currentSelectedCategory = category;
+    document.querySelectorAll('.category-btn').forEach(btn => btn.className = "category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all");
+    element.className = "category-btn bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all";
+    evaluateMonthSelectState();
+}
+
+function evaluateMonthSelectState() {
+    const monthDropdown = document.getElementById('monthCodeInput');
+    if ((currentSelectedCategory === 'TOPUP' || currentSelectedCategory === 'FE' || currentMode === 'bd') && currentSelectedCategory !== 'STORE') { 
+        monthDropdown.disabled = true; 
+    } else { 
+        monthDropdown.disabled = false; 
+    }
+}
+
+function getActiveKeywords(selectedMonth) {
+    let list = [];
+    if (currentSelectedCategory === 'all' || currentSelectedCategory === 'TOPUP') list.push("TopUp");
+    if (currentSelectedCategory === 'all' || currentSelectedCategory === 'FE') list.push("FreeEvent");
     
-    let cleanSpaces = inputFieldVal.replace(/\s+/g, ''); 
-    let cleanBaseWord = cleanSpaces.replace(/^(TW|TT|FW|OT|O|DW|MS|TopUp|FreeEvent)\d?_?/i, ''); 
-    cleanBaseWord = cleanBaseWord.replace(/(Ring|Tower|Wheel|Faded|MysteryShop|Shop)$/i, ''); 
-    
-    let rawVariants = [ cleanSpaces, cleanBaseWord, cleanBaseWord.toLowerCase(), cleanBaseWord.toUpperCase(), cleanBaseWord.charAt(0).toUpperCase() + cleanBaseWord.slice(1) ]; 
-    let low = cleanBaseWord.toLowerCase(); 
-    if (low.includes("kickoff") || low.includes("ring") || low.includes("winning") || low.includes("kick")) { 
-        let baseCleaned = cleanBaseWord.replace(/kickoff/i, 'Kickoff').replace(/ring/i, 'Ring').replace(/winning/i, 'Winning').replace(/kick/i, 'Kick'); 
-        rawVariants.push(baseCleaned, baseCleaned.charAt(0).toUpperCase() + baseCleaned.slice(1)); 
-    } 
-    let variants = [...new Set(rawVariants)]; 
-    
-    const statusArea = document.getElementById('statusArea'); 
-    const resultsContainer = document.getElementById('resultsContainer'); 
-    statusArea.classList.remove('hidden'); 
-    resultsContainer.innerHTML = `<div class="pt-1"><h3 class="text-[10px] font-black text-emerald-400 mb-2.5 uppercase tracking-wider">📡 INJECTED DATA BLOCK (${currentMode.toUpperCase()})</h3><div id="sg-grid" class="grid grid-cols-2 gap-2.5"></div></div>`; 
-    const sgGrid = document.getElementById('sg-grid'); 
-    
-    let allUrlsToTest = []; const yearPrefix = "26"; let targetMonths = []; 
-    if (isHyperMode) { targetMonths = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]; } 
-    else { targetMonths.push(document.getElementById('monthCodeInput').value); } 
-    
-    let foundLabelsTracker = new Set(); let maxUniqueSuffixFormatsPossible = (currentMode === 'eu') ? 7 : 5; 
-    
-    variants.forEach(finalSearchWord => { 
-        if (currentMode === 'bd') { 
-            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'SPLASH' || currentSelectedCategory === 'TOPUP' || currentSelectedCategory === 'TW' || currentSelectedCategory === 'TT' || currentSelectedCategory === 'FW' || currentSelectedCategory === 'O' || currentSelectedCategory === 'DW' || currentSelectedCategory === 'MS' || currentSelectedCategory === 'FE' || currentSelectedCategory === 'STORE' || currentSelectedCategory === 'MYSTERY') { allUrlsToTest.push({ url: `${URL_MAP.bd}config/17501070_${finalSearchWord}BD_en.jpg`, name: `${finalSearchWord}BD_en.jpg`, tag: "BD TAB" }); } 
-            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'SPLASH') { allUrlsToTest.push({ url: `${URL_MAP.bd_splash}1750x1070_${finalSearchWord}_en.jpg`, name: `BD_Splash_${finalSearchWord}.jpg`, tag: "BD SPLASH" }); } 
+    if (currentSelectedCategory === 'all' || currentSelectedCategory === 'O') { 
+        if (currentMode === 'eu') {
+            for(let i=1; i<=7; i++) {
+                list.push(`O${i}`);
+                list.push(`OT${i}`);
+            }
+        } else if (selectedMonth === "AUG" || selectedMonth === "JUL" || selectedMonth === "JUN") { 
+            for(let i=1; i<=7; i++) list.push(`OT${i}`); 
         } else { 
-            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'MS') { targetMonths.forEach(currentMonthChar => { for (let d = 31; d >= 1; d--) { const loopPrefix = yearPrefix + currentMonthChar + d; const msSuffixes = [ { sfx: "_Tab_SG_en.jpg", tag: "MS TAB" }, { sfx: "_Poster_SG_en.png", tag: "MS POSTER" }, { sfx: "_Title_SG_en.png", tag: "MS TITLE" }, { sfx: "_LobbyBG_SG_en.jpg", tag: "MS LOBBY BG" }, { sfx: "_WheelBG_SG_en.png", tag: "MS WHEEL BG" } ]; msSuffixes.forEach(item => { allUrlsToTest.push({ url: `https://dl.dir.freefiremobile.com/common/Local/IND/config/${loopPrefix}_MocoStore_${finalSearchWord}${item.sfx}`, name: `${loopPrefix}_MocoStore_${finalSearchWord}${item.sfx}`, tag: item.tag }); }); } }); } 
-            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'MYSTERY') { targetMonths.forEach(currentMonthChar => { for (let d = 31; d >= 1; d--) { const loopPrefix = yearPrefix + currentMonthChar + d; const msSuffixes = [ { sfx: "_ShopIDMysteryShop_SG.jpg", tag: "MS SHOP ID" }, { sfx: "_BackgroundMysteryShop_SG.jpg", tag: "MS BACKBG" }, { sfx: "_CenterBG_SG.png", tag: "MS CENTER BG" }, { sfx: "_Bundle1MysteryShopA_SG.png", tag: "MS BUNDLE 1A" }, { sfx: "_Bundle1MysteryShopB_SG.png", tag: "MS BUNDLE 1B" }, { sfx: "_Bundle2MysteryShopA_SG.png", tag: "MS BUNDLE 2A" }, { sfx: "_Bundle2MysteryShopB_SG.png", tag: "MS BUNDLE 2B" }, { sfx: "_Bundle1V2MysteryShop_SG.jpg", tag: "MS BUNDLE 1V2" }, { sfx: "_Bundle2V2MysteryShop_SG.jpg", tag: "MS BUNDLE 2V2" } ]; msSuffixes.forEach(item => { allUrlsToTest.push({ url: `${URL_MAP[currentMode]}${loopPrefix}_MS_${finalSearchWord}${item.sfx}`, name: `${loopPrefix}_MS_${finalSearchWord}${item.sfx}`, tag: item.tag }); }); } }); } 
-            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'STORE') { targetMonths.forEach(currentMonthChar => { for (let d = 31; d >= 1; d--) { const loopPrefix = yearPrefix + currentMonthChar + d; allUrlsToTest.push({ url: `${URL_MAP[currentMode]}1500x750_${finalSearchWord}_${loopPrefix}_en.jpg`, name: `1500x750_${finalSearchWord}_${loopPrefix}_en.jpg`, tag: "STORE 1500" }); allUrlsToTest.push({ url: `${URL_MAP[currentMode]}252x256_${finalSearchWord}_${loopPrefix}_en.jpg`, name: `252x256_${finalSearchWord}_${loopPrefix}_en.jpg`, tag: "STORE 252" }); } }); } 
-            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'TOPUP') { let suffixes = (currentMode === 'eu') ? ["TopUp_EU_en.jpg", "TopUp_en.png", "TopUpEU_SmallBanner_en.jpg"] : ["TopUp_en.png", "TopUpSG_en.png", "TopUpNA_en.png", "_Tab_SG_en.jpg", "_Tab_PK_en.jpg", "_Tab_NA_en.jpg"]; suffixes.forEach(sfx => { let finalUrl = sfx.startsWith("GoalTopUp") ? (URL_MAP['eu'] + sfx) : (URL_MAP[currentMode] + finalSearchWord + sfx); allUrlsToTest.push({ url: finalUrl, name: finalSearchWord + sfx, tag: "TOPUP DIRECT" }); }); } 
-            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'FE') { let feSuffixes = ["_1400x700_en.jpg", "SG_1400x700_en.jpg"]; feSuffixes.forEach(sfx => { allUrlsToTest.push({ url: `${URL_MAP[currentMode]}${finalSearchWord}${sfx}`, name: `${finalSearchWord}${sfx}`, tag: "FREE EVENT" }); }); } 
-            if (currentSelectedCategory !== 'TOPUP' && currentSelectedCategory !== 'FE' && currentSelectedCategory !== 'STORE' && currentSelectedCategory !== 'MYSTERY' && currentSelectedCategory !== 'MS') { targetMonths.forEach(currentMonthChar => { let activeKeywords = getActiveKeywords(currentMonthChar); for (let d = 31; d >= 1; d--) { const loopPrefix = yearPrefix + currentMonthChar + d; activeKeywords.forEach(keyword => { if(keyword === "TopUp" || keyword === "FreeEvent") return; if (keyword === "RelayMart") { allUrlsToTest.push({ url: `${URL_MAP[currentMode]}${keyword}${finalSearchWord}-256x107IND_en.png`, name: `${keyword}${finalSearchWord}-256x107IND`, tag: "RM BANNER" }); allUrlsToTest.push({ url: `${URL_MAP[currentMode]}1500x750_${keyword}${finalSearchWord}_${loopPrefix}_en.jpg`, name: `1500x750_${keyword}${finalSearchWord}`, tag: "RM 1500x750" }); allUrlsToTest.push({ url: `${URL_MAP[currentMode]}252x256_${keyword}${finalSearchWord}_${loopPrefix}_en.jpg`, name: `252x256_${keyword}${finalSearchWord}`, tag: "RM 252x256" }); return; } let totalSuffixes = getActiveSuffixes(keyword); totalSuffixes.forEach(asset => { let generatedUrl = ""; let generatedName = ""; if (currentMode === 'eu') { generatedUrl = `${URL_MAP[currentMode]}${loopPrefix}_${keyword}${finalSearchWord}${asset.suffix}`; generatedName = `${loopPrefix}_${keyword}${finalSearchWord}${asset.suffix}`; } else { generatedUrl = `${URL_MAP[currentMode]}${loopPrefix}_${keyword}_${finalSearchWord}${asset.suffix}`; generatedName = `${loopPrefix}_${keyword}_${finalSearchWord}${asset.suffix}`; } allUrlsToTest.push({ url: generatedUrl, name: generatedName, tag: asset.label }); }); }); } }); } 
+            for(let i=1; i<=7; i++) list.push(`O${i}`); 
         } 
-    }); 
+    }
     
-    let uniqueUrls = []; let urlCheckSet = new Set(); allUrlsToTest.forEach(item => { if(!urlCheckSet.has(item.url)) { urlCheckSet.add(item.url); uniqueUrls.push(item); } }); const totalRequests = uniqueUrls.length; if (totalRequests === 0) { statusArea.classList.add('hidden'); return; } 
-    
-    let processedCount = 0, foundAssets = 0, index = 0; const CONCURRENCY_LIMIT = isHyperMode ? 1350 : 750; 
-    
-    async function worker() { 
-        while (index < totalRequests) { 
-            if (forceBreakScanner) break; const item = uniqueUrls[index++]; if (!item) break; 
-            const exists = await new Promise((res) => { const img = new Image(); img.onload = () => res(true); img.onerror = () => res(false); img.src = item.url; }); 
-            if (exists) { 
-                foundAssets++; playSuccessSound(); injectCard(sgGrid, item.url, item.name, item.tag); 
-                document.getElementById('extractCount').innerText = `UNLOCKED: ${foundAssets}`; foundLabelsTracker.add(item.tag); 
-                if (foundLabelsTracker.size >= maxUniqueSuffixFormatsPossible && currentSelectedCategory !== 'all' && currentSelectedCategory !== 'FE' && currentSelectedCategory !== 'STORE' && currentSelectedCategory !== 'MYSTERY' && currentSelectedCategory !== 'MS') { 
-                    forceBreakScanner = true; document.getElementById('statusText').innerText = `⚡ Auto-Stopped: All ${foundAssets} Image Assets Discovered!`; document.getElementById('pFill').style.width = '100%'; document.getElementById('percentText').innerText = '100%'; break; 
-                } 
-            } 
-            processedCount++; 
-            if (processedCount % 30 === 0 || processedCount === totalRequests) { 
-                if (!forceBreakScanner) { let pct = Math.round((processedCount / totalRequests) * 100); document.getElementById('pFill').style.width = pct + '%'; document.getElementById('percentText').innerText = pct + '%'; document.getElementById('statusText').innerText = isHyperMode ? `⚡ HYPER SPEED SCAN: ${processedCount}/${totalRequests}...` : `Searching: ${processedCount}/${totalRequests}...`; } 
-            } 
-        } 
-    } 
-    const workers = []; for (let w = 0; w < Math.min(CONCURRENCY_LIMIT, totalRequests); w++) workers.push(worker()); await Promise.all(workers); 
-    if (!forceBreakScanner) { document.getElementById('statusText').innerText = foundAssets > 0 ? `Scan Complete! Discovered ${foundAssets} Assets.` : "No Assets Detected."; } saveSearchLog(inputFieldVal, foundAssets); 
+    if (currentSelectedCategory === 'all' || currentSelectedCategory === 'TW') for(let i=1; i<=7; i++) list.push(`TW${i}`);
+    if (currentSelectedCategory === 'all' || currentSelectedCategory === 'TT') for(let i=1; i<=7; i++) list.push(`TT${i}`);
+    if (currentSelectedCategory === 'all' || currentSelectedCategory === 'FW') for(let i=1; i<=7; i++) list.push(`FW${i}`);
+    if (currentSelectedCategory === 'all' || currentSelectedCategory === 'DW') for(let i=1; i<=7; i++) list.push(`DW${i}`);
+    if (currentSelectedCategory === 'all' || currentSelectedCategory === 'SPLASH') list.push("SPLASH", "BANNER", "EVO");
+    if (currentSelectedCategory === 'all' || currentSelectedCategory === 'RM') list.push("RelayMart");
+    return list;
 }
 
-window.onload = function() {
-    const tailwind = document.createElement('script');
-    tailwind.src = "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4";
-    document.head.appendChild(tailwind);
+function getActiveSuffixes(keyword) { 
+    if (currentMode === 'eu') { 
+        return [
+            { suffix: "_Tab_EU_en.jpg", label: "TAB (EU)" },
+            { suffix: "_Poster_EU_en.png", label: "POSTER (EU)" },
+            { suffix: "_Title_EU_en.png", label: "TITLE (EU)" },
+            { suffix: "_LobbyBG_EU_en.jpg", label: "LOBBY BG (EU)" },
+            { suffix: "_WheelBG_EU_en.png", label: "WHEEL BG (EU)" },
+            { suffix: "_en.png", label: "ASSET (PNG)" }
+        ]; 
+    }
+    
+    let formats = [
+        { suffix: "_Tab_SG_en.jpg", label: "TAB (SG)" },
+        { suffix: "_Poster_SG_en.png", label: "POSTER (PNG)" },
+        { suffix: "_Title_SG_en.png", label: "TITLE PNG" }
+    ];
+    if (keyword.startsWith("TW") || keyword.startsWith("TT") || keyword.startsWith("FW") || keyword.startsWith("O") || keyword.startsWith("MS") || keyword.startsWith("OT")) {
+        formats.push({ suffix: "_LobbyBG_SG_en.jpg", label: "LOBBY BG" });
+        formats.push({ suffix: "_WheelBG_SG_en.png", label: "WHEEL BG" });
+    }
+    return formats;
+}
 
-    const font = document.createElement('link');
-    font.href = "https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap";
-    font.rel = "stylesheet";
-    document.head.appendChild(font);
+function saveSearchLog(keyword, foundCount) {
+    let history = JSON.parse(localStorage.getItem('ff_assets_finder_logs') || "[]");
+    const newLog = {
+        keyword: keyword,
+        server: currentMode.toUpperCase(),
+        category: currentSelectedCategory.toUpperCase(),
+        found: foundCount,
+        time: new Date().toLocaleTimeString()
+    };
+    history.unshift(newLog);
+    if(history.length > 30) history.pop();
+    localStorage.setItem('ff_assets_finder_logs', JSON.stringify(history));
+    renderHistoryLogs();
+}
 
-    const customStyles = document.createElement('style');
-    customStyles.innerHTML = `
-        @font-face { font-family: 'Bring Race'; src: url('https://fonts.cdnfonts.com/s/121034/BringRace.woff') format('woff'); }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
-        .ff-glow:hover { box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
-        @keyframes rapidFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fast { animation: rapidFade 0.12s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .ig-btn-hover:hover { border-color: #10b981 !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.25); }
-        .yt-btn-hover:hover { border-color: #ff0000 !important; box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
-        @keyframes moveGrid { 0% { background-position: 0px 0px; } 100% { background-position: 40px 40px; } }
-        .bg-grid-pattern { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(16, 185, 129, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(16, 185, 129, 0.08) 1px, transparent 1px); animation: moveGrid 4s linear infinite; }
-        .gaming-logo { font-family: 'Bring Race', sans-serif; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; text-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 25px rgba(255, 255, 255, 0.2); }
-        @keyframes colorShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .animate-multi-color { background: linear-gradient(270deg, #ffffff, #34d399, #10b981, #059669, #ffffff, #34d399); background-size: 400% 400%; animation: colorShift 4s linear infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .running-copyright { background: linear-gradient(90deg, #10b981, #34d399, #a7f3d0, #ffffff, #10b981); background-size: 300% auto; animation: colorShift 3s linear infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    `;
-    document.head.appendChild(customStyles);
+function renderHistoryLogs() {
+    const container = document.getElementById('historyLogsContainer');
+    let history = JSON.parse(localStorage.getItem('ff_assets_finder_logs') || "[]");
+    if(history.length === 0) {
+        container.innerHTML = `<div class="text-gray-600 text-center py-2">No scans executed yet.</div>`;
+        return;
+    }
+    container.innerHTML = history.map(log => {
+        const statusColor = log.found > 0 ? 'text-emerald-400' : 'text-red-500';
+        return `<div class="flex items-center justify-between border-b border-emerald-950/40 pb-1.5 pt-0.5">
+            <div class="flex items-center gap-1.5 truncate">
+                <span class="text-emerald-500 font-bold">[${log.server}]</span>
+                <span class="text-white font-medium truncate" title="${log.keyword}">${log.keyword}</span>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <span class="text-gray-500">${log.time}</span>
+                <span class="font-black ${statusColor}">(${log.found} FOUND)</span>
+            </div>
+        </div>`;
+    }).join('');
+}
 
-    setTimeout(() => {
-        document.body.className = "bg-[#020805] text-gray-100 font-sans min-h-screen flex flex-col items-center justify-center p-4 relative overflow-x-hidden selection:bg-emerald-500 selection:text-black";
-        
-        // Pura HTML Jisme se onclick HATA DIYA GAYA HAI
-        document.body.innerHTML = `
-            <div class="absolute inset-0 bg-grid-pattern pointer-events-none z-0"></div>
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.08)_0%,transparent_75%)] pointer-events-none z-0"></div>
+function clearSearchHistory() {
+    localStorage.setItem('ff_assets_finder_logs', '[]');
+    renderHistoryLogs();
+}
+
+function openImagePreview(url, name) {
+    document.getElementById('lightboxImage').src = url; 
+    document.getElementById('lightboxTitle').innerText = name; 
+    document.getElementById('lightboxDownloadBtn').href = url;
+    document.getElementById('lightboxCopyBtn').setAttribute('data-url', url);
+    document.getElementById('lightboxCopyBtn').innerText = "COPY URL";
+    document.getElementById('imageLightbox').classList.remove('hidden'); 
+    document.body.style.overflow = 'hidden';
+}
+function closeImagePreview() { document.getElementById('imageLightbox').classList.add('hidden'); document.body.style.overflow = ''; }
+
+function copyToClipboard(text, btnElement) {
+    navigator.clipboard.writeText(text).then(() => {
+        const oldText = btnElement.innerText;
+        btnElement.innerText = "COPIED!";
+        setTimeout(() => { btnElement.innerText = oldText; }, 1200);
+    }).catch(err => {
+        alert("Failed to copy link.");
+    });
+}
+
+async function startManualHyperScan(isHyperMode = false) {
+    forceBreakScanner = false; 
+    let inputFieldVal = document.getElementById('searchInput').value.trim();
+    if (!inputFieldVal) return alert("Please enter the Event Keyword");
+    
+    let cleanSpaces = inputFieldVal.replace(/\s+/g, '');
+    
+    let cleanBaseWord = cleanSpaces.replace(/^(TW|TT|FW|OT|O|DW|MS|TopUp|FreeEvent)\d?_?/i, '');
+    cleanBaseWord = cleanBaseWord.replace(/(Ring|Tower|Wheel|Faded|MysteryShop|Shop)$/i, '');
+    
+    let rawVariants = [
+        cleanSpaces,
+        cleanBaseWord, 
+        cleanBaseWord.toLowerCase(), 
+        cleanBaseWord.toUpperCase(), 
+        cleanBaseWord.charAt(0).toUpperCase() + cleanBaseWord.slice(1)
+    ];
+
+    let low = cleanBaseWord.toLowerCase();
+    if (low.includes("kickoff") || low.includes("ring") || low.includes("winning") || low.includes("kick")) {
+        let baseCleaned = cleanBaseWord.replace(/kickoff/i, 'Kickoff').replace(/ring/i, 'Ring').replace(/winning/i, 'Winning').replace(/kick/i, 'Kick');
+        rawVariants.push(baseCleaned, baseCleaned.charAt(0).toUpperCase() + baseCleaned.slice(1));
+    }
+    let variants = [...new Set(rawVariants)];
+    
+    const statusArea = document.getElementById('statusArea');
+    const resultsContainer = document.getElementById('resultsContainer');
+    
+    statusArea.classList.remove('hidden'); 
+    resultsContainer.innerHTML = `<div class="pt-1"><h3 class="text-[10px] font-black text-emerald-400 mb-2.5 uppercase tracking-wider">📡 INJECTED DATA BLOCK (${currentMode.toUpperCase()})</h3><div id="sg-grid" class="grid grid-cols-2 gap-2.5"></div></div>`;
+    const sgGrid = document.getElementById('sg-grid');
+    
+    let allUrlsToTest = [];
+    const yearPrefix = "26"; 
+
+    let targetMonths = [];
+    if (isHyperMode) {
+        targetMonths = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    } else {
+        targetMonths.push(document.getElementById('monthCodeInput').value);
+    }
+
+    let foundLabelsTracker = new Set();
+    let maxUniqueSuffixFormatsPossible = (currentMode === 'eu') ? 7 : 5;
+
+    variants.forEach(finalSearchWord => {
+        if (currentMode === 'bd') {
+            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'SPLASH' || currentSelectedCategory === 'TOPUP' || currentSelectedCategory === 'TW' || currentSelectedCategory === 'TT' || currentSelectedCategory === 'FW' || currentSelectedCategory === 'O' || currentSelectedCategory === 'DW' || currentSelectedCategory === 'MS' || currentSelectedCategory === 'FE' || currentSelectedCategory === 'STORE' || currentSelectedCategory === 'MYSTERY') {
+                allUrlsToTest.push({ url: `${URL_MAP.bd}config/17501070_${finalSearchWord}BD_en.jpg`, name: `${finalSearchWord}BD_en.jpg`, tag: "BD TAB" });
+            }
+            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'SPLASH') {
+                allUrlsToTest.push({ url: `${URL_MAP.bd_splash}1750x1070_${finalSearchWord}_en.jpg`, name: `BD_Splash_${finalSearchWord}.jpg`, tag: "BD SPLASH" });
+            }
+        } else {
+
+            // --- MOCO STORE SEARCH ENGINE (DATES 1 TO 31) ---
+            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'MS') {
+                targetMonths.forEach(currentMonthChar => {
+                    for (let d = 31; d >= 1; d--) {
+                        const loopPrefix = yearPrefix + currentMonthChar + d;
+                        const msSuffixes = [
+                            { sfx: "_Tab_SG_en.jpg", tag: "MS TAB" },
+                            { sfx: "_Poster_SG_en.png", tag: "MS POSTER" },
+                            { sfx: "_Title_SG_en.png", tag: "MS TITLE" },
+                            { sfx: "_LobbyBG_SG_en.jpg", tag: "MS LOBBY BG" },
+                            { sfx: "_WheelBG_SG_en.png", tag: "MS WHEEL BG" }
+                        ];
+
+                        msSuffixes.forEach(item => {
+                            allUrlsToTest.push({
+                                url: `https://dl.dir.freefiremobile.com/common/Local/IND/config/${loopPrefix}_MocoStore_${finalSearchWord}${item.sfx}`,
+                                name: `${loopPrefix}_MocoStore_${finalSearchWord}${item.sfx}`,
+                                tag: item.tag
+                            });
+                        });
+                    }
+                });
+            }
+
+            // --- MYSTERY SHOP SEARCH ENGINE ---
+            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'MYSTERY') {
+                targetMonths.forEach(currentMonthChar => {
+                    for (let d = 31; d >= 1; d--) {
+                        const loopPrefix = yearPrefix + currentMonthChar + d;
+                        const msSuffixes = [
+                            { sfx: "_ShopIDMysteryShop_SG.jpg", tag: "MS SHOP ID" },
+                            { sfx: "_BackgroundMysteryShop_SG.jpg", tag: "MS BACKBG" },
+                            { sfx: "_CenterBG_SG.png", tag: "MS CENTER BG" },
+                            { sfx: "_Bundle1MysteryShopA_SG.png", tag: "MS BUNDLE 1A" },
+                            { sfx: "_Bundle1MysteryShopB_SG.png", tag: "MS BUNDLE 1B" },
+                            { sfx: "_Bundle2MysteryShopA_SG.png", tag: "MS BUNDLE 2A" },
+                            { sfx: "_Bundle2MysteryShopB_SG.png", tag: "MS BUNDLE 2B" },
+                            { sfx: "_Bundle1V2MysteryShop_SG.jpg", tag: "MS BUNDLE 1V2" },
+                            { sfx: "_Bundle2V2MysteryShop_SG.jpg", tag: "MS BUNDLE 2V2" }
+                        ];
+
+                        msSuffixes.forEach(item => {
+                            allUrlsToTest.push({
+                                url: `${URL_MAP[currentMode]}${loopPrefix}_MS_${finalSearchWord}${item.sfx}`,
+                                name: `${loopPrefix}_MS_${finalSearchWord}${item.sfx}`,
+                                tag: item.tag
+                            });
+                        });
+                    }
+                });
+            }
+
+            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'STORE') {
+                targetMonths.forEach(currentMonthChar => {
+                    for (let d = 31; d >= 1; d--) {
+                        const loopPrefix = yearPrefix + currentMonthChar + d;
+                        
+                        allUrlsToTest.push({
+                            url: `${URL_MAP[currentMode]}1500x750_${finalSearchWord}_${loopPrefix}_en.jpg`,
+                            name: `1500x750_${finalSearchWord}_${loopPrefix}_en.jpg`,
+                            tag: "STORE 1500"
+                        });
+                        allUrlsToTest.push({
+                            url: `${URL_MAP[currentMode]}252x256_${finalSearchWord}_${loopPrefix}_en.jpg`,
+                            name: `252x256_${finalSearchWord}_${loopPrefix}_en.jpg`,
+                            tag: "STORE 252"
+                        });
+                    }
+                });
+            }
+
+            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'TOPUP') {
+                let suffixes = (currentMode === 'eu') ? ["TopUp_EU_en.jpg", "TopUp_en.png", "TopUpEU_SmallBanner_en.jpg"] : ["TopUp_en.png", "TopUpSG_en.png", "TopUpNA_en.png", "_Tab_SG_en.jpg", "_Tab_PK_en.jpg", "_Tab_NA_en.jpg"];
+                suffixes.forEach(sfx => { 
+                    let finalUrl = sfx.startsWith("GoalTopUp") ? (URL_MAP['eu'] + sfx) : (URL_MAP[currentMode] + finalSearchWord + sfx);
+                    allUrlsToTest.push({ url: finalUrl, name: finalSearchWord + sfx, tag: "TOPUP DIRECT" }); 
+                });
+            }
+
+            if (currentSelectedCategory === 'all' || currentSelectedCategory === 'FE') {
+                let feSuffixes = ["_1400x700_en.jpg", "SG_1400x700_en.jpg"];
+                feSuffixes.forEach(sfx => {
+                    allUrlsToTest.push({ 
+                        url: `${URL_MAP[currentMode]}${finalSearchWord}${sfx}`, 
+                        name: `${finalSearchWord}${sfx}`, 
+                        tag: "FREE EVENT" 
+                    });
+                });
+            }
+
+            if (currentSelectedCategory !== 'TOPUP' && currentSelectedCategory !== 'FE' && currentSelectedCategory !== 'STORE' && currentSelectedCategory !== 'MYSTERY' && currentSelectedCategory !== 'MS') {
+                targetMonths.forEach(currentMonthChar => {
+                    let activeKeywords = getActiveKeywords(currentMonthChar);
+                    for (let d = 31; d >= 1; d--) {
+                        const loopPrefix = yearPrefix + currentMonthChar + d;
+
+                        activeKeywords.forEach(keyword => { 
+                            if(keyword === "TopUp" || keyword === "FreeEvent") return; 
+                            if (keyword === "RelayMart") {
+                                allUrlsToTest.push({ url: `${URL_MAP[currentMode]}${keyword}${finalSearchWord}-256x107IND_en.png`, name: `${keyword}${finalSearchWord}-256x107IND`, tag: "RM BANNER" });
+                                allUrlsToTest.push({ url: `${URL_MAP[currentMode]}1500x750_${keyword}${finalSearchWord}_${loopPrefix}_en.jpg`, name: `1500x750_${keyword}${finalSearchWord}`, tag: "RM 1500x750" });
+                                allUrlsToTest.push({ url: `${URL_MAP[currentMode]}252x256_${keyword}${finalSearchWord}_${loopPrefix}_en.jpg`, name: `252x256_${keyword}${finalSearchWord}`, tag: "RM 252x256" });
+                                return; 
+                            }
+                            
+                            let totalSuffixes = getActiveSuffixes(keyword);
+                            totalSuffixes.forEach(asset => { 
+                                let generatedUrl = "";
+                                let generatedName = "";
+                                if (currentMode === 'eu') {
+                                    generatedUrl = `${URL_MAP[currentMode]}${loopPrefix}_${keyword}${finalSearchWord}${asset.suffix}`;
+                                    generatedName = `${loopPrefix}_${keyword}${finalSearchWord}${asset.suffix}`;
+                                } else {
+                                    generatedUrl = `${URL_MAP[currentMode]}${loopPrefix}_${keyword}_${finalSearchWord}${asset.suffix}`;
+                                    generatedName = `${loopPrefix}_${keyword}_${finalSearchWord}${asset.suffix}`;
+                                }
+                                allUrlsToTest.push({ url: generatedUrl, name: generatedName, tag: asset.label }); 
+                            }); 
+                        });
+                    }
+                });
+            }
+        }
+    });
+
+    let uniqueUrls = []; let urlCheckSet = new Set();
+    allUrlsToTest.forEach(item => { if(!urlCheckSet.has(item.url)) { urlCheckSet.add(item.url); uniqueUrls.push(item); } });
+    const totalRequests = uniqueUrls.length; if (totalRequests === 0) { statusArea.classList.add('hidden'); return; }
+    
+    let processedCount = 0, foundAssets = 0, index = 0;
+    const CONCURRENCY_LIMIT = isHyperMode ? 1350 : 750; 
+
+    async function worker() {
+        while (index < totalRequests) {
+            if (forceBreakScanner) break; 
             
-            <div id="mainEnginePanel" class="w-full max-w-md bg-[#030f09]/95 rounded-2xl p-5 border-2 border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.15)] relative z-10 backdrop-blur-2xl">
-              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-[4px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent shadow-[0_0_12px_rgba(16,185,129,0.9)]"></div>
-              <div class="text-center mt-2 mb-6">
-                <div class="overflow-hidden w-full">
-                  <h1 id="mainTitle" class="text-2xl xs:text-3xl gaming-logo animate-multi-color py-1 cursor-pointer select-none" title="Tap 3 times for logs">FF ASSETS FINDER</h1>
-                </div>
-                <div class="text-[9px] font-mono tracking-widest text-emerald-400 font-bold mt-2 flex items-center justify-center gap-1.5">
-                  <span class="w-2 h-2 bg-emerald-400 rounded-sm animate-pulse shadow-[0_0_8px_#34d399]"></span>
-                  STATUS: <span class="text-black bg-emerald-400 px-2 py-0.5 rounded border border-emerald-300/40 tracking-wider">TOXIC ENGINE ACTIVE</span>
-                </div>
-                <div class="flex justify-center gap-1 mt-4 bg-black/60 p-1 rounded-xl border border-emerald-950 w-full mx-auto">
-                  <button id="dir-global" data-dir="global" class="dir-btn flex-1 bg-emerald-600 text-white text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer transition-all duration-200 uppercase shadow-md shadow-emerald-500/10">GLOBAL</button>
-                  <button id="dir-india" data-dir="india" class="dir-btn flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 transition-all duration-200 uppercase">INDIA</button>
-                  <button id="dir-bd" data-dir="bd" class="dir-btn flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 transition-all duration-200 uppercase">BD SPLASH</button>
-                  <button id="dir-eu" data-dir="eu" class="dir-btn flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 transition-all duration-200 uppercase">EUROPE</button>
-                </div>
-              </div>
-              <div class="grid grid-cols-12 gap-2 mb-4">
-                <div class="col-span-3">
-                  <label class="block text-[8px] font-mono font-black text-emerald-400 uppercase tracking-widest mb-1.5 pl-1">MONTH</label>
-                  <select id="monthCodeInput" class="w-full bg-[#020805] text-white font-black border border-emerald-900/66 focus:border-emerald-500 rounded-xl py-3 px-1.5 text-xs focus:outline-none cursor-pointer disabled:opacity-30 disabled:text-gray-600 disabled:border-emerald-950/40 transition-all">
-                    <option value="JAN">Jan (JAN)</option><option value="FEB">Feb (FEB)</option><option value="MAR">Mar (MAR)</option><option value="APR">Apr (APR)</option><option value="MAY">May (MAY)</option><option value="JUN">Jun (JUN)</option><option value="JUL">Jul (JUL)</option><option value="AUG" selected="">Aug (AUG)</option><option value="SEP">Sep (SEP)</option><option value="OCT">Oct (OCT)</option><option value="NOV">Nov (NOV)</option><option value="DEC">Dec (DEC)</option>
-                  </select>
-                </div>
-                <div class="col-span-9">
-                  <label class="block text-[8px] font-mono font-black text-emerald-400 uppercase tracking-widest mb-1.5 pl-1">EVENT KEYWORD</label>
-                  <div class="relative flex gap-1">
-                    <input id="searchInput" type="text" placeholder="AsphaltSeries / ReyMysterio..." class="w-full bg-[#020805] border border-emerald-900/60 focus:border-emerald-500 rounded-xl py-3 pl-3 pr-2 text-xs text-white placeholder-gray-600 focus:outline-none transition-all duration-200 font-medium" />
-                    <button id="scanNormalBtn" title="Normal Scan" class="bg-[#030a06] border border-emerald-500/40 text-emerald-400 font-black px-3.5 rounded-xl hover:bg-emerald-950/40 active:scale-95 cursor-pointer transition-all flex items-center justify-center">
-                      <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </button>
-                    <button id="scanHyperBtn" title="⚡ Hyper Multi-Scan" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black px-3.5 rounded-xl hover:opacity-90 active:scale-95 cursor-pointer transition-all ff-glow flex items-center justify-center">
-                      <svg class="w-4 h-4 fill-current animate-pulse" viewBox="0 0 24 24"><path d="M11 21h-1l1-7H5l7-11h1l-1 7h6l-7 11z"></path></svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div id="filter-tags-container" class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 mb-4 text-[9px] font-black tracking-wider uppercase">
-                <button data-cat="all" class="cat-btn bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">ALL EVENTS</button>
-                <button data-cat="MS" class="cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">MOCO (MS)</button>
-                <button data-cat="MYSTERY" class="cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">MYSTERY SHOP</button>
-                <button data-cat="STORE" class="cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">STORE</button>
-                <button data-cat="TOPUP" class="cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">TOPUP</button>
-                <button data-cat="FE" class="cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">FREE EVENT</button>
-                <button data-cat="SPLASH" class="cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">SPLASH</button>
-                <button data-cat="RM" class="cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">RELAY MART</button>
-                <button data-cat="TW" class="cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">RING (TW)</button>
-                <button data-cat="TT" class="cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">TOWER (TT)</button>
-                <button data-cat="FW" class="cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">FW (Faded)</button>
-                <button data-cat="O" class="cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">LUCK (O/OT)</button>
-                <button data-cat="DW" class="cat-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">STEP UP (DW)</button>
-              </div>
-              
-              <div id="statusArea" class="hidden bg-black/80 border border-emerald-950 rounded-xl p-3.5 font-mono text-xs mb-4 relative overflow-hidden">
-                <div class="absolute inset-0 pointer-events-none opacity-[0.03] bg-gradient-to-b from-transparent via-emerald-500 to-transparent" style="animation: scanline 1.2s linear infinite;"></div>
-                <div id="statusText" class="text-emerald-400 font-bold mb-1.5 flex items-center justify-between">Awaiting Command Link...</div>
-                <div class="w-full bg-neutral-900 h-1.5 rounded-full overflow-hidden p-[1px] border border-neutral-950">
-                  <div id="pFill" class="bg-gradient-to-r from-emerald-700 via-emerald-500 to-teal-400 h-full w-0 transition-all duration-75 shadow-[0_0_8px_#10b981]"></div>
-                </div>
-                <div class="flex justify-between items-center text-[9px] text-gray-500 mt-1.5">
-                  <span id="extractCount" class="text-white font-black">UNLOCKED: 0</span>
-                  <span id="percentText" class="font-bold text-emerald-500">0%</span>
-                </div>
-              </div>
-              
-              <div id="resultsContainer" class="space-y-4 max-h-[280px] overflow-y-auto no-scrollbar mb-4"></div>
+            const item = uniqueUrls[index++]; if (!item) break;
+            const exists = await new Promise((res) => { const img = new Image(); img.onload = () => res(true); img.onerror = () => res(false); img.src = item.url; });
+            
+            if (exists) { 
+                foundAssets++; 
+                playSuccessSound(); 
+                injectCard(sgGrid, item.url, item.name, item.tag); 
+                document.getElementById('extractCount').innerText = `UNLOCKED: ${foundAssets}`; 
+                
+                foundLabelsTracker.add(item.tag);
+                
+                if (foundLabelsTracker.size >= maxUniqueSuffixFormatsPossible && currentSelectedCategory !== 'all' && currentSelectedCategory !== 'FE' && currentSelectedCategory !== 'STORE' && currentSelectedCategory !== 'MYSTERY' && currentSelectedCategory !== 'MS') {
+                    forceBreakScanner = true; 
+                    document.getElementById('statusText').innerText = `⚡ Auto-Stopped: All ${foundAssets} Image Assets Discovered!`;
+                    document.getElementById('pFill').style.width = '100%'; 
+                    document.getElementById('percentText').innerText = '100%';
+                    break;
+                }
+            }
+            processedCount++;
+            if (processedCount % 30 === 0 || processedCount === totalRequests) {
+                if (!forceBreakScanner) {
+                    let pct = Math.round((processedCount / totalRequests) * 100);
+                    document.getElementById('pFill').style.width = pct + '%'; document.getElementById('percentText').innerText = pct + '%'; 
+                    document.getElementById('statusText').innerText = isHyperMode ? `⚡ HYPER SPEED SCAN: ${processedCount}/${totalRequests}...` : `Searching: ${processedCount}/${totalRequests}...`;
+                }
+            }
+        }
+    }
+    const workers = []; for (let w = 0; w < Math.min(CONCURRENCY_LIMIT, totalRequests); w++) workers.push(worker());
+    await Promise.all(workers);
+    
+    if (!forceBreakScanner) {
+        document.getElementById('statusText').innerText = foundAssets > 0 ? `Scan Complete! Discovered ${foundAssets} Assets.` : "No Assets Detected.";
+    }
 
-              <div id="secretHistoryPanel" class="hidden mb-4 bg-[#020805] border border-emerald-900/60 rounded-xl p-3 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-[8px] font-mono font-black text-emerald-400 tracking-widest uppercase flex items-center gap-1">
-                    <svg class="w-3 h-3 text-emerald-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Customer Scan History
-                  </span>
-                  <button id="clearHistoryBtn" class="text-[7px] font-mono font-black text-red-500 hover:text-red-400 bg-red-955/30 px-2 py-0.5 rounded border border-red-900/50 uppercase tracking-widest cursor-pointer transition-all">CLEAR</button>
-                </div>
-                <div id="historyLogsContainer" class="max-h-[90px] overflow-y-auto no-scrollbar space-y-1.5 text-[8.5px] font-mono">
-                  <div class="text-gray-600 text-center py-2">No scans executed yet.</div>
-                </div>
-              </div>
+    saveSearchLog(inputFieldVal, foundAssets);
+}
 
-              <div class="pt-3 border-t border-emerald-950/60 flex flex-col items-center justify-center gap-2">
-                <div class="text-[8px] font-mono tracking-widest text-gray-600 uppercase font-black">DEVELOPER CONNECTION</div>
-                <div class="grid grid-cols-2 xs:grid-cols-4 gap-1.5 w-full mb-2">
-                  <a href="https://www.instagram.com/toxicffleakss?igsh=MTNlMmZrajY5eW03cQ==" target="_blank" class="bg-[#020805] border border-emerald-900/40 rounded-xl py-2 px-1 flex items-center justify-center gap-1 text-center transition-all group shadow-md ig-btn-hover"><span class="text-[8px] font-mono font-black text-gray-400 group-hover:text-white tracking-tighter truncate">TOXIC IG</span></a>
-                  <a href="https://www.instagram.com/divided_gamers?igsh=MXBnaXIxODJ0aGQ5dA==" target="_blank" class="bg-[#020805] border border-emerald-900/40 rounded-xl py-2 px-1 flex items-center justify-center gap-1 text-center transition-all group shadow-md ig-btn-hover"><span class="text-[8px] font-mono font-black text-gray-400 group-hover:text-white tracking-tighter truncate">DIVIDED IG</span></a>
-                  <a href="https://www.youtube.com/@toxicffleakss" target="_blank" class="bg-[#020805] border border-red-950/40 rounded-xl py-2 px-1 flex items-center justify-center gap-1 text-center transition-all group shadow-md yt-btn-hover"><span class="text-[8px] font-mono font-black text-gray-400 group-hover:text-white tracking-tighter truncate">TOXIC YT</span></a>
-                  <a href="https://youtube.com/@dividedgamers1450?si=-yiFuBrXmdMWdRGS" target="_blank" class="bg-[#020805] border border-red-950/40 rounded-xl py-2 px-1 flex items-center justify-center gap-1 text-center transition-all group shadow-md yt-btn-hover"><span class="text-[8px] font-mono font-black text-gray-400 group-hover:text-white tracking-tighter truncate">DIVIDED YT</span></a>
-                </div>
-                <div class="text-[10px] font-mono font-black tracking-widest text-center mt-1 border-t border-emerald-950/30 pt-2 w-full uppercase">
-                  <span class="running-copyright">Copyright ©️ @TOXICFFLEAKSS @DIVIDEDGAMER</span>
-                </div>
-              </div>
-            </div>
+function injectCard(gridElement, url, name, tagText) {
+    let colorMap = { 
+        "TAB (SG)": "bg-emerald-600 text-white", 
+        "POSTER (PNG)": "bg-teal-600 text-white", 
+        "TOPUP DIRECT": "bg-emerald-400 text-black", 
+        "BD SPLASH": "bg-emerald-700 text-white",
+        "LOBBY BG": "bg-teal-700 text-white",
+        "WHEEL BG": "bg-emerald-500 text-white",
+        "TITLE PNG": "bg-white text-black",
+        "RM BANNER": "bg-emerald-500 text-white",
+        "TAB (EU)": "bg-emerald-600 text-white",
+        "LOBBY BG (EU)": "bg-teal-600 text-white",
+        "POSTER (EU)": "bg-emerald-700 text-white",
+        "TITLE (EU)": "bg-white text-black",
+        "WHEEL BG (EU)": "bg-teal-600 text-white",
+        "ASSET (PNG)": "bg-emerald-500 text-white",
+        "FREE EVENT": "bg-teal-500 text-white",
+        "STORE 1500": "bg-emerald-400 text-black",
+        "STORE 252": "bg-teal-400 text-white",
+        "MS SHOP ID": "bg-emerald-600 text-white",
+        "MS BACKBG": "bg-teal-700 text-white",
+        "MS CENTER BG": "bg-emerald-500 text-white",
+        "MS BUNDLE 1A": "bg-teal-500 text-white",
+        "MS BUNDLE 1B": "bg-emerald-500 text-white",
+        "MS BUNDLE 2A": "bg-teal-500 text-white",
+        "MS BUNDLE 2B": "bg-emerald-500 text-white",
+        "MS BUNDLE 1V2": "bg-emerald-600 text-white",
+        "MS BUNDLE 2V2": "bg-teal-600 text-white",
+        "MS TAB": "bg-emerald-600 text-white",
+        "MS POSTER": "bg-teal-600 text-white",
+        "MS TITLE": "bg-white text-black",
+        "MS LOBBY BG": "bg-emerald-700 text-white",
+        "MS WHEEL BG": "bg-teal-500 text-white"
+    };
+    let badgeClass = colorMap[tagText] || "bg-emerald-600 text-white";
+    gridElement.insertAdjacentHTML('beforeend', `<div class="bg-[#030f09] border border-emerald-950/60 rounded-xl p-2 flex flex-col justify-between animate-fast hover:border-emerald-500/30 transition-all shadow-xl"><div onclick="openImagePreview('${url}', '${name}')" class="relative overflow-hidden rounded-lg bg-black mb-2 cursor-pointer group border border-neutral-900"><img src="${url}" class="w-full h-24 object-cover transition-transform duration-200 group-hover:scale-105" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23020805%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2310b981%22 font-weight=%22bold%22 font-size=%229%22 font-family=%22monospace%22>ASSET DISCOVERED</text></svg>';"><span class="absolute bottom-1 left-1 ${badgeClass} text-[7px] font-black px-1.5 py-0.5 rounded tracking-wide uppercase shadow-md">${tagText}</span></div><div class="text-[8px] font-mono text-gray-400 truncate mb-2 px-0.5" title="${name}">${name}</div><div class="flex gap-1"><button onclick="openImagePreview('${url}', '${name}')" class="flex-1 bg-emerald-950/20 hover:bg-emerald-600 text-emerald-400 hover:text-white py-1.5 rounded-lg transition border border-emerald-900/30 font-black text-[9px] uppercase tracking-wide">OPEN</button><button onclick="copyToClipboard('${url}', this)" class="flex-1 bg-[#030f09] border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 py-1.5 rounded-lg transition font-black text-[8px] uppercase tracking-wide">COPY LINK</button></div></div>`);
+}
 
-            <div id="imageLightbox" class="hidden fixed inset-0 bg-black/95 flex flex-col items-center justify-center p-5 z-50 backdrop-blur-md transition-opacity duration-200">
-              <button id="closeLightboxBtn" class="absolute top-5 right-5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 rounded-full p-3 hover:bg-emerald-500/20 cursor-pointer transition-all active:scale-90">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-              </button>
-              <div class="w-full max-w-md max-h-[65vh] flex items-center justify-center overflow-hidden rounded-xl border-2 border-emerald-500/40 shadow-[0_0_60px_rgba(16,185,129,0.2)] bg-[#020805] p-1">
-                <img id="lightboxImage" src="" class="w-full h-full object-contain rounded-lg" />
-              </div>
-              <div id="lightboxTitle" class="mt-4 text-[9px] font-mono text-white bg-black px-4 py-2 rounded-lg border border-emerald-950 max-xs truncate text-center uppercase tracking-wider">Asset Discovered</div>
-              <div class="flex gap-2 mt-5 w-full max-w-sm">
-                <button id="closeLightboxBtn2" class="flex-1 bg-neutral-950 border border-neutral-900 text-gray-400 font-black py-3 rounded-xl text-xs tracking-wider uppercase text-center cursor-pointer transition active:scale-95">← CLOSE</button>
-                <button id="lightboxCopyBtn" class="flex-1 bg-emerald-900/40 border border-emerald-500/50 text-emerald-400 font-black py-3 rounded-xl text-xs tracking-wider uppercase text-center cursor-pointer transition active:scale-95">COPY URL</button>
-                <a id="lightboxDownloadBtn" href="#" target="_blank" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black py-3 rounded-xl text-xs tracking-wider uppercase text-center cursor-pointer transition shadow-lg active:scale-95 flex items-center justify-center gap-1">DOWNLOAD</a>
-              </div>
-            </div>
-        `;
-        
-        // ==========================================
-        // YAHAN HOTE HAIN SAARE BUTTON SECURELY ATTACH
-        // ==========================================
-        document.getElementById('mainTitle').addEventListener('click', handleTitleTap);
-        
-        document.querySelectorAll('.dir-btn').forEach(btn => { 
-            btn.addEventListener('click', (e) => toggleDir(e.target.getAttribute('data-dir'))); 
-        });
-        
-        document.querySelectorAll('.cat-btn').forEach(btn => { 
-            btn.addEventListener('click', (e) => selectCategory(e.target.getAttribute('data-cat'), e.target)); 
-        });
-        
-        document.getElementById('scanNormalBtn').addEventListener('click', () => startManualHyperScan(false));
-        document.getElementById('scanHyperBtn').addEventListener('click', () => startManualHyperScan(true));
-        
-        document.getElementById('clearHistoryBtn').addEventListener('click', clearSearchHistory);
-        document.getElementById('closeLightboxBtn').addEventListener('click', closeImagePreview);
-        document.getElementById('closeLightboxBtn2').addEventListener('click', closeImagePreview);
-        
-        document.getElementById('lightboxCopyBtn').addEventListener('click', function() {
-            copyToClipboard(this.getAttribute('data-url'), this);
-        });
-
-        document.querySelectorAll('button, a, select').forEach(element => { 
-            element.addEventListener('click', playClick); 
-        });
-        
-        renderHistoryLogs();
-    }, 100);
-};
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('button, a, select').forEach(element => { element.addEventListener('click', playClick); });
+    renderHistoryLogs();
+});
 
