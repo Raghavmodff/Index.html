@@ -1,4 +1,6 @@
-// 1. GLOBAL VARIABLES & FUNCTIONS (Taki Obfuscator inko hide na kare)
+// ==========================================
+// 1. GLOBAL VARIABLES & SETUP
+// ==========================================
 window.currentSelectedCategory = "all"; 
 window.currentMode = "global"; 
 window.forceBreakScanner = false; 
@@ -34,12 +36,176 @@ window.openImagePreview = function(url, name) { document.getElementById('lightbo
 window.closeImagePreview = function() { document.getElementById('imageLightbox').classList.add('hidden'); document.body.style.overflow = ''; };
 window.copyToClipboard = function(text, btnElement) { navigator.clipboard.writeText(text).then(() => { const oldText = btnElement.innerText; btnElement.innerText = "COPIED!"; setTimeout(() => { btnElement.innerText = oldText; }, 1200); }).catch(err => { alert("Failed to copy link."); }); };
 
-window.injectCard = function(gridElement, url, name, tagText) { let colorMap = { "TAB (SG)": "bg-emerald-600 text-white", "POSTER (PNG)": "bg-teal-600 text-white", "TOPUP DIRECT": "bg-emerald-400 text-black", "BD SPLASH": "bg-emerald-700 text-white", "LOBBY BG": "bg-teal-700 text-white", "WHEEL BG": "bg-emerald-500 text-white", "TITLE PNG": "bg-white text-black", "RM BANNER": "bg-emerald-500 text-white", "TAB (EU)": "bg-emerald-600 text-white", "LOBBY BG (EU)": "bg-teal-600 text-white", "POSTER (EU)": "bg-emerald-700 text-white", "TITLE (EU)": "bg-white text-black", "WHEEL BG (EU)": "bg-teal-600 text-white", "ASSET (PNG)": "bg-emerald-500 text-white", "FREE EVENT": "bg-teal-500 text-white", "STORE 1500": "bg-emerald-400 text-black", "STORE 252": "bg-teal-400 text-white", "MS SHOP ID": "bg-emerald-600 text-white", "MS BACKBG": "bg-teal-700 text-white", "MS CENTER BG": "bg-emerald-500 text-white", "MS BUNDLE 1A": "bg-teal-500 text-white", "MS BUNDLE 1B": "bg-emerald-500 text-white", "MS BUNDLE 2A": "bg-teal-500 text-white", "MS BUNDLE 2B": "bg-emerald-500 text-white", "MS BUNDLE 1V2": "bg-emerald-600 text-white", "MS BUNDLE 2V2": "bg-teal-600 text-white", "MS TAB": "bg-emerald-600 text-white", "MS POSTER": "bg-teal-600 text-white", "MS TITLE": "bg-white text-black", "MS LOBBY BG": "bg-emerald-700 text-white", "MS WHEEL BG": "bg-teal-500 text-white" }; let badgeClass = colorMap[tagText] || "bg-emerald-600 text-white"; gridElement.insertAdjacentHTML('beforeend', `<div class="bg-[#030f09] border border-emerald-950/60 rounded-xl p-2 flex flex-col justify-between animate-fast hover:border-emerald-500/30 transition-all shadow-xl"><div onclick="openImagePreview('${url}', '${name}')" class="relative overflow-hidden rounded-lg bg-black mb-2 cursor-pointer group border border-neutral-900"><img src="${url}" class="w-full h-24 object-cover transition-transform duration-200 group-hover:scale-105" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23020805%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2310b981%22 font-weight=%22bold%22 font-size=%229%22 font-family=%22monospace%22>ASSET DISCOVERED</text></svg>';"><span class="absolute bottom-1 left-1 ${badgeClass} text-[7px] font-black px-1.5 py-0.5 rounded tracking-wide uppercase shadow-md">${tagText}</span></div><div class="text-[8px] font-mono text-gray-400 truncate mb-2 px-0.5" title="${name}">${name}</div><div class="flex gap-1"><button onclick="openImagePreview('${url}', '${name}')" class="flex-1 bg-emerald-950/20 hover:bg-emerald-600 text-emerald-400 hover:text-white py-1.5 rounded-lg transition border border-emerald-900/30 font-black text-[9px] uppercase tracking-wide">OPEN</button><button onclick="copyToClipboard('${url}', this)" class="flex-1 bg-[#030f09] border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 py-1.5 rounded-lg transition font-black text-[8px] uppercase tracking-wide">COPY LINK</button></div></div>`); };
+window.injectCard = function(gridElement, url, name, tagText) { 
+    let colorMap = { "TAB (SG)": "bg-emerald-600 text-white", "POSTER (PNG)": "bg-teal-600 text-white", "TOPUP DIRECT": "bg-emerald-400 text-black", "BD SPLASH": "bg-emerald-700 text-white", "LOBBY BG": "bg-teal-700 text-white", "WHEEL BG": "bg-emerald-500 text-white", "TITLE PNG": "bg-white text-black", "RM BANNER": "bg-emerald-500 text-white", "TAB (EU)": "bg-emerald-600 text-white", "LOBBY BG (EU)": "bg-teal-600 text-white", "POSTER (EU)": "bg-emerald-700 text-white", "TITLE (EU)": "bg-white text-black", "WHEEL BG (EU)": "bg-teal-600 text-white", "ASSET (PNG)": "bg-emerald-500 text-white", "FREE EVENT": "bg-teal-500 text-white", "STORE 1500": "bg-emerald-400 text-black", "STORE 252": "bg-teal-400 text-white", "MS SHOP ID": "bg-emerald-600 text-white", "MS BACKBG": "bg-teal-700 text-white", "MS CENTER BG": "bg-emerald-500 text-white", "MS BUNDLE 1A": "bg-teal-500 text-white", "MS BUNDLE 1B": "bg-emerald-500 text-white", "MS BUNDLE 2A": "bg-teal-500 text-white", "MS BUNDLE 2B": "bg-emerald-500 text-white", "MS BUNDLE 1V2": "bg-emerald-600 text-white", "MS BUNDLE 2V2": "bg-teal-600 text-white", "MS TAB": "bg-emerald-600 text-white", "MS POSTER": "bg-teal-600 text-white", "MS TITLE": "bg-white text-black", "MS LOBBY BG": "bg-emerald-700 text-white", "MS WHEEL BG": "bg-teal-500 text-white" }; 
+    let badgeClass = colorMap[tagText] || "bg-emerald-600 text-white"; 
+    // Yahan onClick functions me window lagaya gaya hai
+    gridElement.insertAdjacentHTML('beforeend', `<div class="bg-[#030f09] border border-emerald-950/60 rounded-xl p-2 flex flex-col justify-between animate-fast hover:border-emerald-500/30 transition-all shadow-xl"><div onclick="window.openImagePreview('${url}', '${name}')" class="relative overflow-hidden rounded-lg bg-black mb-2 cursor-pointer group border border-neutral-900"><img src="${url}" class="w-full h-24 object-cover transition-transform duration-200 group-hover:scale-105" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23020805%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2310b981%22 font-weight=%22bold%22 font-size=%229%22 font-family=%22monospace%22>ASSET DISCOVERED</text></svg>';"><span class="absolute bottom-1 left-1 ${badgeClass} text-[7px] font-black px-1.5 py-0.5 rounded tracking-wide uppercase shadow-md">${tagText}</span></div><div class="text-[8px] font-mono text-gray-400 truncate mb-2 px-0.5" title="${name}">${name}</div><div class="flex gap-1"><button onclick="window.openImagePreview('${url}', '${name}')" class="flex-1 bg-emerald-950/20 hover:bg-emerald-600 text-emerald-400 hover:text-white py-1.5 rounded-lg transition border border-emerald-900/30 font-black text-[9px] uppercase tracking-wide">OPEN</button><button onclick="window.copyToClipboard('${url}', this)" class="flex-1 bg-[#030f09] border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 py-1.5 rounded-lg transition font-black text-[8px] uppercase tracking-wide">COPY LINK</button></div></div>`); 
+};
 
-window.startManualHyperScan = async function(isHyperMode = false) { window.forceBreakScanner = false; let inputFieldVal = document.getElementById('searchInput').value.trim(); if (!inputFieldVal) return alert("Please enter the Event Keyword"); let cleanSpaces = inputFieldVal.replace(/\s+/g, ''); let cleanBaseWord = cleanSpaces.replace(/^(TW|TT|FW|OT|O|DW|MS|TopUp|FreeEvent)\d?_?/i, ''); cleanBaseWord = cleanBaseWord.replace(/(Ring|Tower|Wheel|Faded|MysteryShop|Shop)$/i, ''); let rawVariants = [ cleanSpaces, cleanBaseWord, cleanBaseWord.toLowerCase(), cleanBaseWord.toUpperCase(), cleanBaseWord.charAt(0).toUpperCase() + cleanBaseWord.slice(1) ]; let low = cleanBaseWord.toLowerCase(); if (low.includes("kickoff") || low.includes("ring") || low.includes("winning") || low.includes("kick")) { let baseCleaned = cleanBaseWord.replace(/kickoff/i, 'Kickoff').replace(/ring/i, 'Ring').replace(/winning/i, 'Winning').replace(/kick/i, 'Kick'); rawVariants.push(baseCleaned, baseCleaned.charAt(0).toUpperCase() + baseCleaned.slice(1)); } let variants = [...new Set(rawVariants)]; const statusArea = document.getElementById('statusArea'); const resultsContainer = document.getElementById('resultsContainer'); statusArea.classList.remove('hidden'); resultsContainer.innerHTML = `<div class="pt-1"><h3 class="text-[10px] font-black text-emerald-400 mb-2.5 uppercase tracking-wider">📡 INJECTED DATA BLOCK (${window.currentMode.toUpperCase()})</h3><div id="sg-grid" class="grid grid-cols-2 gap-2.5"></div></div>`; const sgGrid = document.getElementById('sg-grid'); let allUrlsToTest = []; const yearPrefix = "26"; let targetMonths = []; if (isHyperMode) { targetMonths = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]; } else { targetMonths.push(document.getElementById('monthCodeInput').value); } let foundLabelsTracker = new Set(); let maxUniqueSuffixFormatsPossible = (window.currentMode === 'eu') ? 7 : 5; variants.forEach(finalSearchWord => { if (window.currentMode === 'bd') { if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'SPLASH' || window.currentSelectedCategory === 'TOPUP' || window.currentSelectedCategory === 'TW' || window.currentSelectedCategory === 'TT' || window.currentSelectedCategory === 'FW' || window.currentSelectedCategory === 'O' || window.currentSelectedCategory === 'DW' || window.currentSelectedCategory === 'MS' || window.currentSelectedCategory === 'FE' || window.currentSelectedCategory === 'STORE' || window.currentSelectedCategory === 'MYSTERY') { allUrlsToTest.push({ url: `${window.URL_MAP.bd}config/17501070_${finalSearchWord}BD_en.jpg`, name: `${finalSearchWord}BD_en.jpg`, tag: "BD TAB" }); } if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'SPLASH') { allUrlsToTest.push({ url: `${window.URL_MAP.bd_splash}1750x1070_${finalSearchWord}_en.jpg`, name: `BD_Splash_${finalSearchWord}.jpg`, tag: "BD SPLASH" }); } } else { if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'MS') { targetMonths.forEach(currentMonthChar => { for (let d = 31; d >= 1; d--) { const loopPrefix = yearPrefix + currentMonthChar + d; const msSuffixes = [ { sfx: "_Tab_SG_en.jpg", tag: "MS TAB" }, { sfx: "_Poster_SG_en.png", tag: "MS POSTER" }, { sfx: "_Title_SG_en.png", tag: "MS TITLE" }, { sfx: "_LobbyBG_SG_en.jpg", tag: "MS LOBBY BG" }, { sfx: "_WheelBG_SG_en.png", tag: "MS WHEEL BG" } ]; msSuffixes.forEach(item => { allUrlsToTest.push({ url: `https://dl.dir.freefiremobile.com/common/Local/IND/config/${loopPrefix}_MocoStore_${finalSearchWord}${item.sfx}`, name: `${loopPrefix}_MocoStore_${finalSearchWord}${item.sfx}`, tag: item.tag }); }); } }); } if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'MYSTERY') { targetMonths.forEach(currentMonthChar => { for (let d = 31; d >= 1; d--) { const loopPrefix = yearPrefix + currentMonthChar + d; const msSuffixes = [ { sfx: "_ShopIDMysteryShop_SG.jpg", tag: "MS SHOP ID" }, { sfx: "_BackgroundMysteryShop_SG.jpg", tag: "MS BACKBG" }, { sfx: "_CenterBG_SG.png", tag: "MS CENTER BG" }, { sfx: "_Bundle1MysteryShopA_SG.png", tag: "MS BUNDLE 1A" }, { sfx: "_Bundle1MysteryShopB_SG.png", tag: "MS BUNDLE 1B" }, { sfx: "_Bundle2MysteryShopA_SG.png", tag: "MS BUNDLE 2A" }, { sfx: "_Bundle2MysteryShopB_SG.png", tag: "MS BUNDLE 2B" }, { sfx: "_Bundle1V2MysteryShop_SG.jpg", tag: "MS BUNDLE 1V2" }, { sfx: "_Bundle2V2MysteryShop_SG.jpg", tag: "MS BUNDLE 2V2" } ]; msSuffixes.forEach(item => { allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}${loopPrefix}_MS_${finalSearchWord}${item.sfx}`, name: `${loopPrefix}_MS_${finalSearchWord}${item.sfx}`, tag: item.tag }); }); } }); } if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'STORE') { targetMonths.forEach(currentMonthChar => { for (let d = 31; d >= 1; d--) { const loopPrefix = yearPrefix + currentMonthChar + d; allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}1500x750_${finalSearchWord}_${loopPrefix}_en.jpg`, name: `1500x750_${finalSearchWord}_${loopPrefix}_en.jpg`, tag: "STORE 1500" }); allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}252x256_${finalSearchWord}_${loopPrefix}_en.jpg`, name: `252x256_${finalSearchWord}_${loopPrefix}_en.jpg`, tag: "STORE 252" }); } }); } if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'TOPUP') { let suffixes = (window.currentMode === 'eu') ? ["TopUp_EU_en.jpg", "TopUp_en.png", "TopUpEU_SmallBanner_en.jpg"] : ["TopUp_en.png", "TopUpSG_en.png", "TopUpNA_en.png", "_Tab_SG_en.jpg", "_Tab_PK_en.jpg", "_Tab_NA_en.jpg"]; suffixes.forEach(sfx => { let finalUrl = sfx.startsWith("GoalTopUp") ? (window.URL_MAP['eu'] + sfx) : (window.URL_MAP[window.currentMode] + finalSearchWord + sfx); allUrlsToTest.push({ url: finalUrl, name: finalSearchWord + sfx, tag: "TOPUP DIRECT" }); }); } if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'FE') { let feSuffixes = ["_1400x700_en.jpg", "SG_1400x700_en.jpg"]; feSuffixes.forEach(sfx => { allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}${finalSearchWord}${sfx}`, name: `${finalSearchWord}${sfx}`, tag: "FREE EVENT" }); }); } if (window.currentSelectedCategory !== 'TOPUP' && window.currentSelectedCategory !== 'FE' && window.currentSelectedCategory !== 'STORE' && window.currentSelectedCategory !== 'MYSTERY' && window.currentSelectedCategory !== 'MS') { targetMonths.forEach(currentMonthChar => { let activeKeywords = window.getActiveKeywords(currentMonthChar); for (let d = 31; d >= 1; d--) { const loopPrefix = yearPrefix + currentMonthChar + d; activeKeywords.forEach(keyword => { if(keyword === "TopUp" || keyword === "FreeEvent") return; if (keyword === "RelayMart") { allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}${keyword}${finalSearchWord}-256x107IND_en.png`, name: `${keyword}${finalSearchWord}-256x107IND`, tag: "RM BANNER" }); allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}1500x750_${keyword}${finalSearchWord}_${loopPrefix}_en.jpg`, name: `1500x750_${keyword}${finalSearchWord}`, tag: "RM 1500x750" }); allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}252x256_${keyword}${finalSearchWord}_${loopPrefix}_en.jpg`, name: `252x256_${keyword}${finalSearchWord}`, tag: "RM 252x256" }); return; } let totalSuffixes = window.getActiveSuffixes(keyword); totalSuffixes.forEach(asset => { let generatedUrl = ""; let generatedName = ""; if (window.currentMode === 'eu') { generatedUrl = `${window.URL_MAP[window.currentMode]}${loopPrefix}_${keyword}${finalSearchWord}${asset.suffix}`; generatedName = `${loopPrefix}_${keyword}${finalSearchWord}${asset.suffix}`; } else { generatedUrl = `${window.URL_MAP[window.currentMode]}${loopPrefix}_${keyword}_${finalSearchWord}${asset.suffix}`; generatedName = `${loopPrefix}_${keyword}_${finalSearchWord}${asset.suffix}`; } allUrlsToTest.push({ url: generatedUrl, name: generatedName, tag: asset.label }); }); }); } }); } } }); let uniqueUrls = []; let urlCheckSet = new Set(); allUrlsToTest.forEach(item => { if(!urlCheckSet.has(item.url)) { urlCheckSet.add(item.url); uniqueUrls.push(item); } }); const totalRequests = uniqueUrls.length; if (totalRequests === 0) { statusArea.classList.add('hidden'); return; } let processedCount = 0, foundAssets = 0, index = 0; const CONCURRENCY_LIMIT = isHyperMode ? 1350 : 750; async function worker() { while (index < totalRequests) { if (window.forceBreakScanner) break; const item = uniqueUrls[index++]; if (!item) break; const exists = await new Promise((res) => { const img = new Image(); img.onload = () => res(true); img.onerror = () => res(false); img.src = item.url; }); if (exists) { foundAssets++; window.playSuccessSound(); window.injectCard(sgGrid, item.url, item.name, item.tag); document.getElementById('extractCount').innerText = `UNLOCKED: ${foundAssets}`; window.foundLabelsTracker.add(item.tag); if (window.foundLabelsTracker.size >= maxUniqueSuffixFormatsPossible && window.currentSelectedCategory !== 'all' && window.currentSelectedCategory !== 'FE' && window.currentSelectedCategory !== 'STORE' && window.currentSelectedCategory !== 'MYSTERY' && window.currentSelectedCategory !== 'MS') { window.forceBreakScanner = true; document.getElementById('statusText').innerText = `⚡ Auto-Stopped: All ${foundAssets} Image Assets Discovered!`; document.getElementById('pFill').style.width = '100%'; document.getElementById('percentText').innerText = '100%'; break; } } processedCount++; if (processedCount % 30 === 0 || processedCount === totalRequests) { if (!window.forceBreakScanner) { let pct = Math.round((processedCount / totalRequests) * 100); document.getElementById('pFill').style.width = pct + '%'; document.getElementById('percentText').innerText = pct + '%'; document.getElementById('statusText').innerText = isHyperMode ? `⚡ HYPER SPEED SCAN: ${processedCount}/${totalRequests}...` : `Searching: ${processedCount}/${totalRequests}...`; } } } } const workers = []; for (let w = 0; w < Math.min(CONCURRENCY_LIMIT, totalRequests); w++) workers.push(worker()); await Promise.all(workers); if (!window.forceBreakScanner) { document.getElementById('statusText').innerText = foundAssets > 0 ? `Scan Complete! Discovered ${foundAssets} Assets.` : "No Assets Detected."; } window.saveSearchLog(inputFieldVal, foundAssets); };
+// ==========================================
+// 2. MAIN SCANNER FUNCTION
+// ==========================================
+window.startManualHyperScan = async function(isHyperMode = false) { 
+    window.forceBreakScanner = false; 
+    let inputFieldVal = document.getElementById('searchInput').value.trim(); 
+    if (!inputFieldVal) return alert("Please enter the Event Keyword"); 
+    
+    let cleanSpaces = inputFieldVal.replace(/\s+/g, ''); 
+    let cleanBaseWord = cleanSpaces.replace(/^(TW|TT|FW|OT|O|DW|MS|TopUp|FreeEvent)\d?_?/i, ''); 
+    cleanBaseWord = cleanBaseWord.replace(/(Ring|Tower|Wheel|Faded|MysteryShop|Shop)$/i, ''); 
+    
+    let rawVariants = [ cleanSpaces, cleanBaseWord, cleanBaseWord.toLowerCase(), cleanBaseWord.toUpperCase(), cleanBaseWord.charAt(0).toUpperCase() + cleanBaseWord.slice(1) ]; 
+    let low = cleanBaseWord.toLowerCase(); 
+    if (low.includes("kickoff") || low.includes("ring") || low.includes("winning") || low.includes("kick")) { 
+        let baseCleaned = cleanBaseWord.replace(/kickoff/i, 'Kickoff').replace(/ring/i, 'Ring').replace(/winning/i, 'Winning').replace(/kick/i, 'Kick'); 
+        rawVariants.push(baseCleaned, baseCleaned.charAt(0).toUpperCase() + baseCleaned.slice(1)); 
+    } 
+    let variants = [...new Set(rawVariants)]; 
+    
+    const statusArea = document.getElementById('statusArea'); 
+    const resultsContainer = document.getElementById('resultsContainer'); 
+    statusArea.classList.remove('hidden'); 
+    resultsContainer.innerHTML = `<div class="pt-1"><h3 class="text-[10px] font-black text-emerald-400 mb-2.5 uppercase tracking-wider">📡 INJECTED DATA BLOCK (${window.currentMode.toUpperCase()})</h3><div id="sg-grid" class="grid grid-cols-2 gap-2.5"></div></div>`; 
+    const sgGrid = document.getElementById('sg-grid'); 
+    
+    let allUrlsToTest = []; 
+    const yearPrefix = "26"; 
+    let targetMonths = []; 
+    if (isHyperMode) { targetMonths = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]; } 
+    else { targetMonths.push(document.getElementById('monthCodeInput').value); } 
+    
+    let foundLabelsTracker = new Set(); // Local variable correctly initialized
+    let maxUniqueSuffixFormatsPossible = (window.currentMode === 'eu') ? 7 : 5; 
+    
+    variants.forEach(finalSearchWord => { 
+        if (window.currentMode === 'bd') { 
+            if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'SPLASH' || window.currentSelectedCategory === 'TOPUP' || window.currentSelectedCategory === 'TW' || window.currentSelectedCategory === 'TT' || window.currentSelectedCategory === 'FW' || window.currentSelectedCategory === 'O' || window.currentSelectedCategory === 'DW' || window.currentSelectedCategory === 'MS' || window.currentSelectedCategory === 'FE' || window.currentSelectedCategory === 'STORE' || window.currentSelectedCategory === 'MYSTERY') { 
+                allUrlsToTest.push({ url: `${window.URL_MAP.bd}config/17501070_${finalSearchWord}BD_en.jpg`, name: `${finalSearchWord}BD_en.jpg`, tag: "BD TAB" }); 
+            } 
+            if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'SPLASH') { 
+                allUrlsToTest.push({ url: `${window.URL_MAP.bd_splash}1750x1070_${finalSearchWord}_en.jpg`, name: `BD_Splash_${finalSearchWord}.jpg`, tag: "BD SPLASH" }); 
+            } 
+        } else { 
+            if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'MS') { 
+                targetMonths.forEach(currentMonthChar => { 
+                    for (let d = 31; d >= 1; d--) { 
+                        const loopPrefix = yearPrefix + currentMonthChar + d; 
+                        const msSuffixes = [ { sfx: "_Tab_SG_en.jpg", tag: "MS TAB" }, { sfx: "_Poster_SG_en.png", tag: "MS POSTER" }, { sfx: "_Title_SG_en.png", tag: "MS TITLE" }, { sfx: "_LobbyBG_SG_en.jpg", tag: "MS LOBBY BG" }, { sfx: "_WheelBG_SG_en.png", tag: "MS WHEEL BG" } ]; 
+                        msSuffixes.forEach(item => { allUrlsToTest.push({ url: `https://dl.dir.freefiremobile.com/common/Local/IND/config/${loopPrefix}_MocoStore_${finalSearchWord}${item.sfx}`, name: `${loopPrefix}_MocoStore_${finalSearchWord}${item.sfx}`, tag: item.tag }); }); 
+                    } 
+                }); 
+            } 
+            if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'MYSTERY') { 
+                targetMonths.forEach(currentMonthChar => { 
+                    for (let d = 31; d >= 1; d--) { 
+                        const loopPrefix = yearPrefix + currentMonthChar + d; 
+                        const msSuffixes = [ { sfx: "_ShopIDMysteryShop_SG.jpg", tag: "MS SHOP ID" }, { sfx: "_BackgroundMysteryShop_SG.jpg", tag: "MS BACKBG" }, { sfx: "_CenterBG_SG.png", tag: "MS CENTER BG" }, { sfx: "_Bundle1MysteryShopA_SG.png", tag: "MS BUNDLE 1A" }, { sfx: "_Bundle1MysteryShopB_SG.png", tag: "MS BUNDLE 1B" }, { sfx: "_Bundle2MysteryShopA_SG.png", tag: "MS BUNDLE 2A" }, { sfx: "_Bundle2MysteryShopB_SG.png", tag: "MS BUNDLE 2B" }, { sfx: "_Bundle1V2MysteryShop_SG.jpg", tag: "MS BUNDLE 1V2" }, { sfx: "_Bundle2V2MysteryShop_SG.jpg", tag: "MS BUNDLE 2V2" } ]; 
+                        msSuffixes.forEach(item => { allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}${loopPrefix}_MS_${finalSearchWord}${item.sfx}`, name: `${loopPrefix}_MS_${finalSearchWord}${item.sfx}`, tag: item.tag }); }); 
+                    } 
+                }); 
+            } 
+            if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'STORE') { 
+                targetMonths.forEach(currentMonthChar => { 
+                    for (let d = 31; d >= 1; d--) { 
+                        const loopPrefix = yearPrefix + currentMonthChar + d; 
+                        allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}1500x750_${finalSearchWord}_${loopPrefix}_en.jpg`, name: `1500x750_${finalSearchWord}_${loopPrefix}_en.jpg`, tag: "STORE 1500" }); 
+                        allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}252x256_${finalSearchWord}_${loopPrefix}_en.jpg`, name: `252x256_${finalSearchWord}_${loopPrefix}_en.jpg`, tag: "STORE 252" }); 
+                    } 
+                }); 
+            } 
+            if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'TOPUP') { 
+                let suffixes = (window.currentMode === 'eu') ? ["TopUp_EU_en.jpg", "TopUp_en.png", "TopUpEU_SmallBanner_en.jpg"] : ["TopUp_en.png", "TopUpSG_en.png", "TopUpNA_en.png", "_Tab_SG_en.jpg", "_Tab_PK_en.jpg", "_Tab_NA_en.jpg"]; 
+                suffixes.forEach(sfx => { 
+                    let finalUrl = sfx.startsWith("GoalTopUp") ? (window.URL_MAP['eu'] + sfx) : (window.URL_MAP[window.currentMode] + finalSearchWord + sfx); 
+                    allUrlsToTest.push({ url: finalUrl, name: finalSearchWord + sfx, tag: "TOPUP DIRECT" }); 
+                }); 
+            } 
+            if (window.currentSelectedCategory === 'all' || window.currentSelectedCategory === 'FE') { 
+                let feSuffixes = ["_1400x700_en.jpg", "SG_1400x700_en.jpg"]; 
+                feSuffixes.forEach(sfx => { allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}${finalSearchWord}${sfx}`, name: `${finalSearchWord}${sfx}`, tag: "FREE EVENT" }); }); 
+            } 
+            if (window.currentSelectedCategory !== 'TOPUP' && window.currentSelectedCategory !== 'FE' && window.currentSelectedCategory !== 'STORE' && window.currentSelectedCategory !== 'MYSTERY' && window.currentSelectedCategory !== 'MS') { 
+                targetMonths.forEach(currentMonthChar => { 
+                    let activeKeywords = window.getActiveKeywords(currentMonthChar); 
+                    for (let d = 31; d >= 1; d--) { 
+                        const loopPrefix = yearPrefix + currentMonthChar + d; 
+                        activeKeywords.forEach(keyword => { 
+                            if(keyword === "TopUp" || keyword === "FreeEvent") return; 
+                            if (keyword === "RelayMart") { 
+                                allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}${keyword}${finalSearchWord}-256x107IND_en.png`, name: `${keyword}${finalSearchWord}-256x107IND`, tag: "RM BANNER" }); 
+                                allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}1500x750_${keyword}${finalSearchWord}_${loopPrefix}_en.jpg`, name: `1500x750_${keyword}${finalSearchWord}`, tag: "RM 1500x750" }); 
+                                allUrlsToTest.push({ url: `${window.URL_MAP[window.currentMode]}252x256_${keyword}${finalSearchWord}_${loopPrefix}_en.jpg`, name: `252x256_${keyword}${finalSearchWord}`, tag: "RM 252x256" }); 
+                                return; 
+                            } 
+                            let totalSuffixes = window.getActiveSuffixes(keyword); 
+                            totalSuffixes.forEach(asset => { 
+                                let generatedUrl = ""; let generatedName = ""; 
+                                if (window.currentMode === 'eu') { 
+                                    generatedUrl = `${window.URL_MAP[window.currentMode]}${loopPrefix}_${keyword}${finalSearchWord}${asset.suffix}`; 
+                                    generatedName = `${loopPrefix}_${keyword}${finalSearchWord}${asset.suffix}`; 
+                                } else { 
+                                    generatedUrl = `${window.URL_MAP[window.currentMode]}${loopPrefix}_${keyword}_${finalSearchWord}${asset.suffix}`; 
+                                    generatedName = `${loopPrefix}_${keyword}_${finalSearchWord}${asset.suffix}`; 
+                                } 
+                                allUrlsToTest.push({ url: generatedUrl, name: generatedName, tag: asset.label }); 
+                            }); 
+                        }); 
+                    } 
+                }); 
+            } 
+        } 
+    }); 
+    
+    let uniqueUrls = []; let urlCheckSet = new Set(); 
+    allUrlsToTest.forEach(item => { if(!urlCheckSet.has(item.url)) { urlCheckSet.add(item.url); uniqueUrls.push(item); } }); 
+    const totalRequests = uniqueUrls.length; if (totalRequests === 0) { statusArea.classList.add('hidden'); return; } 
+    
+    let processedCount = 0, foundAssets = 0, index = 0; 
+    const CONCURRENCY_LIMIT = isHyperMode ? 1350 : 750; 
+    
+    async function worker() { 
+        while (index < totalRequests) { 
+            if (window.forceBreakScanner) break; 
+            const item = uniqueUrls[index++]; if (!item) break; 
+            const exists = await new Promise((res) => { const img = new Image(); img.onload = () => res(true); img.onerror = () => res(false); img.src = item.url; }); 
+            if (exists) { 
+                foundAssets++; 
+                window.playSuccessSound(); 
+                window.injectCard(sgGrid, item.url, item.name, item.tag); 
+                document.getElementById('extractCount').innerText = `UNLOCKED: ${foundAssets}`; 
+                
+                foundLabelsTracker.add(item.tag); // Bug fixed: Properly adds to local set
+                
+                if (foundLabelsTracker.size >= maxUniqueSuffixFormatsPossible && window.currentSelectedCategory !== 'all' && window.currentSelectedCategory !== 'FE' && window.currentSelectedCategory !== 'STORE' && window.currentSelectedCategory !== 'MYSTERY' && window.currentSelectedCategory !== 'MS') { 
+                    window.forceBreakScanner = true; 
+                    document.getElementById('statusText').innerText = `⚡ Auto-Stopped: All ${foundAssets} Image Assets Discovered!`; 
+                    document.getElementById('pFill').style.width = '100%'; 
+                    document.getElementById('percentText').innerText = '100%'; 
+                    break; 
+                } 
+            } 
+            processedCount++; 
+            if (processedCount % 30 === 0 || processedCount === totalRequests) { 
+                if (!window.forceBreakScanner) { 
+                    let pct = Math.round((processedCount / totalRequests) * 100); 
+                    document.getElementById('pFill').style.width = pct + '%'; 
+                    document.getElementById('percentText').innerText = pct + '%'; 
+                    document.getElementById('statusText').innerText = isHyperMode ? `⚡ HYPER SPEED SCAN: ${processedCount}/${totalRequests}...` : `Searching: ${processedCount}/${totalRequests}...`; 
+                } 
+            } 
+        } 
+    } 
+    const workers = []; for (let w = 0; w < Math.min(CONCURRENCY_LIMIT, totalRequests); w++) workers.push(worker()); 
+    await Promise.all(workers); 
+    
+    if (!window.forceBreakScanner) { document.getElementById('statusText').innerText = foundAssets > 0 ? `Scan Complete! Discovered ${foundAssets} Assets.` : "No Assets Detected."; } 
+    window.saveSearchLog(inputFieldVal, foundAssets); 
+};
 
-
-// 2. DYNAMIC UI INJECTOR
+// ==========================================
+// 3. DYNAMIC UI INJECTOR
+// ==========================================
 window.onload = function() {
     const tailwind = document.createElement('script');
     tailwind.src = "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4";
@@ -201,9 +367,7 @@ window.onload = function() {
             </div>
         `;
         
-        // Yeh code UI aane ke baad button par sound effect attach karega
         document.querySelectorAll('button, a, select').forEach(element => { element.addEventListener('click', window.playClick); });
         window.renderHistoryLogs();
     }, 100);
 };
-
