@@ -86,15 +86,25 @@
           <span class="text-black bg-emerald-400 px-2 py-0.5 rounded border border-emerald-300/40 tracking-wider">TOXIC ENGINE ACTIVE</span>
         </div>
         <div class="flex justify-center gap-1 mt-4 bg-black/60 p-1 rounded-xl border border-emerald-950 w-full mx-auto">
-          <button id="dir-global" onclick="toggleDir('global')" class="flex-1 bg-emerald-600 text-white text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer transition-all duration-200 uppercase shadow-md shadow-emerald-500/10">GLOBAL</button>
-          <button id="dir-india" onclick="toggleDir('india')" class="flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 transition-all duration-200 uppercase">INDIA</button>
-          <button id="dir-bd" onclick="toggleDir('bd')" class="flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 transition-all duration-200 uppercase">BD SPLASH</button>
-          <button id="dir-eu" onclick="toggleDir('eu')" class="flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 transition-all duration-200 uppercase">EUROPE</button>
+          <button id="dir-global" onclick="toggleDir('global')" class="flex-1 bg-emerald-600 text-white text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer transition-all duration-200 uppercase shadow-md shadow-emerald-500/10">
+            GLOBAL
+          </button>
+          <button id="dir-india" onclick="toggleDir('india')" class="flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 transition-all duration-200 uppercase">
+            INDIA
+          </button>
+          <button id="dir-bd" onclick="toggleDir('bd')" class="flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 transition-all duration-200 uppercase">
+            BD SPLASH
+          </button>
+          <button id="dir-eu" onclick="toggleDir('eu')" class="flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 transition-all duration-200 uppercase">
+            EUROPE
+          </button>
         </div>
       </div>
       <div class="grid grid-cols-12 gap-2 mb-4">
         <div class="col-span-3">
-          <label class="block text-[8px] font-mono font-black text-emerald-400 uppercase tracking-widest mb-1.5 pl-1">MONTH</label>
+          <label class="block text-[8px] font-mono font-black text-emerald-400 uppercase tracking-widest mb-1.5 pl-1">
+            MONTH
+          </label>
           <select id="monthCodeInput" class="w-full bg-[#020805] text-white font-black border border-emerald-900/66 focus:border-emerald-500 rounded-xl py-3 px-1.5 text-xs focus:outline-none cursor-pointer disabled:opacity-30 disabled:text-gray-600 disabled:border-emerald-950/40 transition-all">
             <option value="JAN">Jan (JAN)</option>
             <option value="FEB">Feb (FEB)</option>
@@ -111,14 +121,20 @@
           </select>
         </div>
         <div class="col-span-9">
-          <label class="block text-[8px] font-mono font-black text-emerald-400 uppercase tracking-widest mb-1.5 pl-1">EVENT KEYWORD</label>
+          <label class="block text-[8px] font-mono font-black text-emerald-400 uppercase tracking-widest mb-1.5 pl-1">
+            EVENT KEYWORD
+          </label>
           <div class="relative flex gap-1">
             <input id="searchInput" type="text" placeholder="AsphaltSeries / ReyMysterio..." class="w-full bg-[#020805] border border-emerald-900/60 focus:border-emerald-500 rounded-xl py-3 pl-3 pr-2 text-xs text-white placeholder-gray-600 focus:outline-none transition-all duration-200 font-medium" />
             <button onclick="startManualHyperScan(false)" title="Normal Scan (Selected Month Only)" class="bg-[#030a06] border border-emerald-500/40 text-emerald-400 font-black px-3.5 rounded-xl hover:bg-emerald-950/40 active:scale-95 cursor-pointer transition-all flex items-center justify-center">
-              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
             </button>
             <button onclick="startManualHyperScan(true)" title="⚡ Hyper Multi-Scan" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black px-3.5 rounded-xl hover:opacity-90 active:scale-95 cursor-pointer transition-all ff-glow flex items-center justify-center">
-              <svg class="w-4 h-4 fill-current animate-pulse" viewBox="0 0 24 24"><path d="M11 21h-1l1-7H5l7-11h1l-1 7h6l-7 11z"></path></svg>
+              <svg class="w-4 h-4 fill-current animate-pulse" viewBox="0 0 24 24">
+                <path d="M11 21h-1l1-7H5l7-11h1l-1 7h6l-7 11z"></path>
+              </svg>
             </button>
           </div>
         </div>
@@ -153,6 +169,7 @@
       
       <div id="resultsContainer" class="space-y-4 max-h-[280px] overflow-y-auto no-scrollbar mb-4"></div>
 
+      <!-- SECRET SEARCH HISTORY LOGGER PANEL -->
       <div id="secretHistoryPanel" class="hidden mb-4 bg-[#020805] border border-emerald-900/60 rounded-xl p-3 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
         <div class="flex items-center justify-between mb-2">
           <span class="text-[8px] font-mono font-black text-emerald-400 tracking-widest uppercase flex items-center gap-1">
@@ -168,21 +185,46 @@
 
       <div class="pt-3 border-t border-emerald-950/60 flex flex-col items-center justify-center gap-2">
         <div class="text-[8px] font-mono tracking-widest text-gray-600 uppercase font-black">DEVELOPER CONNECTION</div>
+        <!-- 2x2 Grid setup -->
         <div class="grid grid-cols-2 xs:grid-cols-4 gap-1.5 w-full mb-2">
+          <!-- Toxic FF -->
           <a href="https://www.instagram.com/toxicffleakss?igsh=MTNlMmZrajY5eW03cQ==" target="_blank" class="bg-[#020805] border border-emerald-900/40 rounded-xl py-2 px-1 flex items-center justify-center gap-1 text-center transition-all group shadow-md ig-btn-hover">          
-          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><defs><linearGradient id="ig-official-grad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#fed373"></stop><stop offset="25%" stop-color="#f15245"></stop><stop offset="60%" stop-color="#d92e7f"></stop><stop offset="100%" stop-color="#9b36b7"></stop></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#ig-official-grad)"></rect><circle cx="12" cy="12" r="4.5" stroke="url(#ig-official-grad)"></circle><circle cx="17.75" cy="6.25" r="0.75" fill="url(#ig-official-grad)" stroke="url(#ig-official-grad)"></circle></svg>
+          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke-width="2.2">
+            <defs>
+              <linearGradient id="ig-official-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#fed373"></stop>
+                <stop offset="25%" stop-color="#f15245"></stop>
+                <stop offset="60%" stop-color="#d92e7f"></stop>
+                <stop offset="100%" stop-color="#9b36b7"></stop>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#ig-official-grad)"></rect>
+            <circle cx="12" cy="12" r="4.5" stroke="url(#ig-official-grad)"></circle>
+            <circle cx="17.75" cy="6.25" r="0.75" fill="url(#ig-official-grad)" stroke="url(#ig-official-grad)"></circle>
+          </svg>
           <span class="text-[8px] font-mono font-black text-gray-400 group-hover:text-white tracking-tighter truncate">TOXIC IG</span>
           </a>
+          <!-- Divided IG -->
           <a href="https://www.instagram.com/divided_gamers?igsh=MXBnaXIxODJ0aGQ5dA==" target="_blank" class="bg-[#020805] border border-emerald-900/40 rounded-xl py-2 px-1 flex items-center justify-center gap-1 text-center transition-all group shadow-md ig-btn-hover">          
-          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#ig-official-grad)"></rect><circle cx="12" cy="12" r="4.5" stroke="url(#ig-official-grad)"></circle><circle cx="17.75" cy="6.25" r="0.75" fill="url(#ig-official-grad)" stroke="url(#ig-official-grad)"></circle></svg>
+          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke-width="2.2">
+            <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#ig-official-grad)"></rect>
+            <circle cx="12" cy="12" r="4.5" stroke="url(#ig-official-grad)"></circle>
+            <circle cx="17.75" cy="6.25" r="0.75" fill="url(#ig-official-grad)" stroke="url(#ig-official-grad)"></circle>
+          </svg>
           <span class="text-[8px] font-mono font-black text-gray-400 group-hover:text-white tracking-tighter truncate">DIVIDED IG</span>
           </a>
+          <!-- Toxic YT -->
           <a href="https://www.youtube.com/@toxicffleakss" target="_blank" class="bg-[#020805] border border-red-950/40 rounded-xl py-2 px-1 flex items-center justify-center gap-1 text-center transition-all group shadow-md yt-btn-hover">          
-          <svg class="w-3.5 h-3.5 shrink-0 text-[#ff0000]" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path></svg>
+          <svg class="w-3.5 h-3.5 shrink-0 text-[#ff0000]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path>
+          </svg>
           <span class="text-[8px] font-mono font-black text-gray-400 group-hover:text-white tracking-tighter truncate">TOXIC YT</span>
           </a>
+          <!-- Divided YT -->
           <a href="https://youtube.com/@dividedgamers1450?si=-yiFuBrXmdMWdRGS" target="_blank" class="bg-[#020805] border border-red-950/40 rounded-xl py-2 px-1 flex items-center justify-center gap-1 text-center transition-all group shadow-md yt-btn-hover">          
-          <svg class="w-3.5 h-3.5 shrink-0 text-[#ff0000]" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path></svg>
+          <svg class="w-3.5 h-3.5 shrink-0 text-[#ff0000]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path>
+          </svg>
           <span class="text-[8px] font-mono font-black text-gray-400 group-hover:text-white tracking-tighter truncate">DIVIDED YT</span>
           </a>
         </div>
@@ -192,9 +234,12 @@
       </div>
     </div>
 
+    <!-- IMAGE LIGHTBOX -->
     <div id="imageLightbox" class="hidden fixed inset-0 bg-black/95 flex flex-col items-center justify-center p-5 z-50 backdrop-blur-md transition-opacity duration-200">
       <button onclick="closeImagePreview()" class="absolute top-5 right-5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 rounded-full p-3 hover:bg-emerald-500/20 cursor-pointer transition-all active:scale-90">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
       </button>
       <div class="w-full max-w-md max-h-[65vh] flex items-center justify-center overflow-hidden rounded-xl border-2 border-emerald-500/40 shadow-[0_0_60px_rgba(16,185,129,0.2)] bg-[#020805] p-1">
         <img id="lightboxImage" src="" class="w-full h-full object-contain rounded-lg" />
@@ -206,9 +251,9 @@
         <a id="lightboxDownloadBtn" href="#" target="_blank" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black py-3 rounded-xl text-xs tracking-wider uppercase text-center cursor-pointer transition shadow-lg active:scale-95 flex items-center justify-center gap-1">DOWNLOAD</a>
       </div>
     </div>
-
-    <!-- Engine Script Loaded Here -->
-    <script src="engine.js"></script>
+    
+    <!-- YAHAN SE JS FILE LINK KI GAYI HAI -->
+    <script src="script.js"></script>
   </body>
 </html>
 
