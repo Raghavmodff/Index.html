@@ -1,1 +1,214 @@
-website Under Maintenance 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FF ASSETS FINDER - TOXIC GREEN ULTRA ENGINE v9.5</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+    <style>
+      @font-face {
+            font-family: 'Bring Race';
+            src: url('https://fonts.cdnfonts.com/s/121034/BringRace.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+        
+        .ff-glow:hover { box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
+        
+        @keyframes rapidFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fast { animation: rapidFade 0.12s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        .ig-btn-hover:hover { border-color: #10b981 !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.25); }
+        .yt-btn-hover:hover { border-color: #ff0000 !important; box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
+        
+        @keyframes moveGrid {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 40px 40px; }
+        }
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(16, 185, 129, 0.08) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+            animation: moveGrid 4s linear infinite;
+        }
+
+        .gaming-logo {
+            font-family: 'Bring Race', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            white-space: nowrap; 
+            text-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 25px rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes colorShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .animate-multi-color {
+            background: linear-gradient(270deg, #ffffff, #34d399, #10b981, #059669, #ffffff, #34d399);
+            background-size: 400% 400%;
+            animation: colorShift 4s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .running-copyright {
+            background: linear-gradient(90deg, #10b981, #34d399, #a7f3d0, #ffffff, #10b981);
+            background-size: 300% auto;
+            animation: colorShift 3s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+  </head>
+  <body class="bg-[#020805] text-gray-100 font-sans min-h-screen flex flex-col items-center justify-center p-4 relative overflow-x-hidden selection:bg-emerald-500 selection:text-black">
+    <div class="absolute inset-0 bg-grid-pattern pointer-events-none z-0"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.08)_0%,transparent_75%)] pointer-events-none z-0"></div>
+    
+    <div id="mainEnginePanel" class="w-full max-w-md bg-[#030f09]/95 rounded-2xl p-5 border-2 border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.15)] relative z-10 backdrop-blur-2xl">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-[4px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent shadow-[0_0_12px_rgba(16,185,129,0.9)]"></div>
+      <div class="text-center mt-2 mb-6">
+        <div class="overflow-hidden w-full">
+          <h1 onclick="handleTitleTap()" class="text-2xl xs:text-3xl gaming-logo animate-multi-color py-1 cursor-pointer select-none" title="Tap 3 times for logs">
+            FF ASSETS FINDER
+          </h1>
+        </div>
+        <div class="text-[9px] font-mono tracking-widest text-emerald-400 font-bold mt-2 flex items-center justify-center gap-1.5">
+          <span class="w-2 h-2 bg-emerald-400 rounded-sm animate-pulse shadow-[0_0_8px_#34d399]"></span>
+          STATUS:
+          <span class="text-black bg-emerald-400 px-2 py-0.5 rounded border border-emerald-300/40 tracking-wider">TOXIC ENGINE ACTIVE</span>
+        </div>
+        <div class="flex justify-center gap-1 mt-4 bg-black/60 p-1 rounded-xl border border-emerald-950 w-full mx-auto">
+          <button id="dir-global" onclick="toggleDir('global')" class="flex-1 bg-emerald-600 text-white text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer transition-all duration-200 uppercase shadow-md shadow-emerald-500/10">GLOBAL</button>
+          <button id="dir-india" onclick="toggleDir('india')" class="flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 transition-all duration-200 uppercase">INDIA</button>
+          <button id="dir-bd" onclick="toggleDir('bd')" class="flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 transition-all duration-200 uppercase">BD SPLASH</button>
+          <button id="dir-eu" onclick="toggleDir('eu')" class="flex-1 bg-transparent text-gray-500 text-[9px] font-black tracking-wider py-2 rounded-lg cursor-pointer hover:text-gray-300 transition-all duration-200 uppercase">EUROPE</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-2 mb-4">
+        <div class="col-span-3">
+          <label class="block text-[8px] font-mono font-black text-emerald-400 uppercase tracking-widest mb-1.5 pl-1">MONTH</label>
+          <select id="monthCodeInput" class="w-full bg-[#020805] text-white font-black border border-emerald-900/66 focus:border-emerald-500 rounded-xl py-3 px-1.5 text-xs focus:outline-none cursor-pointer disabled:opacity-30 disabled:text-gray-600 disabled:border-emerald-950/40 transition-all">
+            <option value="JAN">Jan (JAN)</option>
+            <option value="FEB">Feb (FEB)</option>
+            <option value="MAR">Mar (MAR)</option>
+            <option value="APR">Apr (APR)</option>
+            <option value="MAY">May (MAY)</option>
+            <option value="JUN">Jun (JUN)</option>
+            <option value="JUL">Jul (JUL)</option>
+            <option value="AUG" selected="">Aug (AUG)</option>
+            <option value="SEP">Sep (SEP)</option>
+            <option value="OCT">Oct (OCT)</option>
+            <option value="NOV">Nov (NOV)</option>
+            <option value="DEC">Dec (DEC)</option>
+          </select>
+        </div>
+        <div class="col-span-9">
+          <label class="block text-[8px] font-mono font-black text-emerald-400 uppercase tracking-widest mb-1.5 pl-1">EVENT KEYWORD</label>
+          <div class="relative flex gap-1">
+            <input id="searchInput" type="text" placeholder="AsphaltSeries / ReyMysterio..." class="w-full bg-[#020805] border border-emerald-900/60 focus:border-emerald-500 rounded-xl py-3 pl-3 pr-2 text-xs text-white placeholder-gray-600 focus:outline-none transition-all duration-200 font-medium" />
+            <button onclick="startManualHyperScan(false)" title="Normal Scan (Selected Month Only)" class="bg-[#030a06] border border-emerald-500/40 text-emerald-400 font-black px-3.5 rounded-xl hover:bg-emerald-950/40 active:scale-95 cursor-pointer transition-all flex items-center justify-center">
+              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </button>
+            <button onclick="startManualHyperScan(true)" title="⚡ Hyper Multi-Scan" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black px-3.5 rounded-xl hover:opacity-90 active:scale-95 cursor-pointer transition-all ff-glow flex items-center justify-center">
+              <svg class="w-4 h-4 fill-current animate-pulse" viewBox="0 0 24 24"><path d="M11 21h-1l1-7H5l7-11h1l-1 7h6l-7 11z"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="filter-tags-container" class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 mb-4 text-[9px] font-black tracking-wider uppercase">
+        <button onclick="selectCategory('all', this)" class="category-btn bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">ALL EVENTS</button>
+        <button onclick="selectCategory('MS', this)" class="category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">MOCO (MS)</button>
+        <button onclick="selectCategory('MYSTERY', this)" class="category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">MYSTERY SHOP</button>
+        <button onclick="selectCategory('STORE', this)" class="category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">STORE</button>
+        <button onclick="selectCategory('TOPUP', this)" class="category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">TOPUP</button>
+        <button onclick="selectCategory('FE', this)" class="category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">FREE EVENT</button>
+        <button onclick="selectCategory('SPLASH', this)" class="category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">SPLASH</button>
+        <button onclick="selectCategory('RM', this)" class="category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">RELAY MART</button>
+        <button onclick="selectCategory('TW', this)" class="category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">RING (TW)</button>
+        <button onclick="selectCategory('TT', this)" class="category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">TOWER (TT)</button>
+        <button onclick="selectCategory('FW', this)" class="category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">FW (Faded)</button>
+        <button onclick="selectCategory('O', this)" class="category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">LUCK (O/OT)</button>
+        <button onclick="selectCategory('DW', this)" class="category-btn bg-black/50 text-gray-500 px-3.5 py-2.5 rounded-lg whitespace-nowrap cursor-pointer transition-all">STEP UP (DW)</button>
+      </div>
+      
+      <div id="statusArea" class="hidden bg-black/80 border border-emerald-950 rounded-xl p-3.5 font-mono text-xs mb-4 relative overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none opacity-[0.03] bg-gradient-to-b from-transparent via-emerald-500 to-transparent" style="animation: scanline 1.2s linear infinite;"></div>
+        <div id="statusText" class="text-emerald-400 font-bold mb-1.5 flex items-center justify-between">Awaiting Command Link...</div>
+        <div class="w-full bg-neutral-900 h-1.5 rounded-full overflow-hidden p-[1px] border border-neutral-950">
+          <div id="pFill" class="bg-gradient-to-r from-emerald-700 via-emerald-500 to-teal-400 h-full w-0 transition-all duration-75 shadow-[0_0_8px_#10b981]"></div>
+        </div>
+        <div class="flex justify-between items-center text-[9px] text-gray-500 mt-1.5">
+          <span id="extractCount" class="text-white font-black">UNLOCKED: 0</span>
+          <span id="percentText" class="font-bold text-emerald-500">0%</span>
+        </div>
+      </div>
+      
+      <div id="resultsContainer" class="space-y-4 max-h-[280px] overflow-y-auto no-scrollbar mb-4"></div>
+
+      <div id="secretHistoryPanel" class="hidden mb-4 bg-[#020805] border border-emerald-900/60 rounded-xl p-3 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[8px] font-mono font-black text-emerald-400 tracking-widest uppercase flex items-center gap-1">
+            <svg class="w-3 h-3 text-emerald-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Customer Scan History
+          </span>
+          <button onclick="clearSearchHistory()" class="text-[7px] font-mono font-black text-red-500 hover:text-red-400 bg-red-955/30 px-2 py-0.5 rounded border border-red-900/50 uppercase tracking-widest cursor-pointer transition-all">CLEAR</button>
+        </div>
+        <div id="historyLogsContainer" class="max-h-[90px] overflow-y-auto no-scrollbar space-y-1.5 text-[8.5px] font-mono">
+          <div class="text-gray-600 text-center py-2">No scans executed yet.</div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-emerald-950/60 flex flex-col items-center justify-center gap-2">
+        <div class="text-[8px] font-mono tracking-widest text-gray-600 uppercase font-black">DEVELOPER CONNECTION</div>
+        <div class="grid grid-cols-2 xs:grid-cols-4 gap-1.5 w-full mb-2">
+          <a href="https://www.instagram.com/toxicffleakss?igsh=MTNlMmZrajY5eW03cQ==" target="_blank" class="bg-[#020805] border border-emerald-900/40 rounded-xl py-2 px-1 flex items-center justify-center gap-1 text-center transition-all group shadow-md ig-btn-hover">          
+          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><defs><linearGradient id="ig-official-grad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#fed373"></stop><stop offset="25%" stop-color="#f15245"></stop><stop offset="60%" stop-color="#d92e7f"></stop><stop offset="100%" stop-color="#9b36b7"></stop></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#ig-official-grad)"></rect><circle cx="12" cy="12" r="4.5" stroke="url(#ig-official-grad)"></circle><circle cx="17.75" cy="6.25" r="0.75" fill="url(#ig-official-grad)" stroke="url(#ig-official-grad)"></circle></svg>
+          <span class="text-[8px] font-mono font-black text-gray-400 group-hover:text-white tracking-tighter truncate">TOXIC IG</span>
+          </a>
+          <a href="https://www.instagram.com/divided_gamers?igsh=MXBnaXIxODJ0aGQ5dA==" target="_blank" class="bg-[#020805] border border-emerald-900/40 rounded-xl py-2 px-1 flex items-center justify-center gap-1 text-center transition-all group shadow-md ig-btn-hover">          
+          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#ig-official-grad)"></rect><circle cx="12" cy="12" r="4.5" stroke="url(#ig-official-grad)"></circle><circle cx="17.75" cy="6.25" r="0.75" fill="url(#ig-official-grad)" stroke="url(#ig-official-grad)"></circle></svg>
+          <span class="text-[8px] font-mono font-black text-gray-400 group-hover:text-white tracking-tighter truncate">DIVIDED IG</span>
+          </a>
+          <a href="https://www.youtube.com/@toxicffleakss" target="_blank" class="bg-[#020805] border border-red-950/40 rounded-xl py-2 px-1 flex items-center justify-center gap-1 text-center transition-all group shadow-md yt-btn-hover">          
+          <svg class="w-3.5 h-3.5 shrink-0 text-[#ff0000]" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path></svg>
+          <span class="text-[8px] font-mono font-black text-gray-400 group-hover:text-white tracking-tighter truncate">TOXIC YT</span>
+          </a>
+          <a href="https://youtube.com/@dividedgamers1450?si=-yiFuBrXmdMWdRGS" target="_blank" class="bg-[#020805] border border-red-950/40 rounded-xl py-2 px-1 flex items-center justify-center gap-1 text-center transition-all group shadow-md yt-btn-hover">          
+          <svg class="w-3.5 h-3.5 shrink-0 text-[#ff0000]" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path></svg>
+          <span class="text-[8px] font-mono font-black text-gray-400 group-hover:text-white tracking-tighter truncate">DIVIDED YT</span>
+          </a>
+        </div>
+        <div class="text-[10px] font-mono font-black tracking-widest text-center mt-1 border-t border-emerald-950/30 pt-2 w-full uppercase">
+          <span class="running-copyright">Copyright ©️ @TOXICFFLEAKSS @DIVIDEDGAMER</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="imageLightbox" class="hidden fixed inset-0 bg-black/95 flex flex-col items-center justify-center p-5 z-50 backdrop-blur-md transition-opacity duration-200">
+      <button onclick="closeImagePreview()" class="absolute top-5 right-5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 rounded-full p-3 hover:bg-emerald-500/20 cursor-pointer transition-all active:scale-90">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+      <div class="w-full max-w-md max-h-[65vh] flex items-center justify-center overflow-hidden rounded-xl border-2 border-emerald-500/40 shadow-[0_0_60px_rgba(16,185,129,0.2)] bg-[#020805] p-1">
+        <img id="lightboxImage" src="" class="w-full h-full object-contain rounded-lg" />
+      </div>
+      <div id="lightboxTitle" class="mt-4 text-[9px] font-mono text-white bg-black px-4 py-2 rounded-lg border border-emerald-950 max-xs truncate text-center uppercase tracking-wider">Asset Discovered</div>
+      <div class="flex gap-2 mt-5 w-full max-w-sm">
+        <button onclick="closeImagePreview()" class="flex-1 bg-neutral-950 border border-neutral-900 text-gray-400 font-black py-3 rounded-xl text-xs tracking-wider uppercase text-center cursor-pointer transition active:scale-95">← CLOSE</button>
+        <button id="lightboxCopyBtn" onclick="copyToClipboard(this.getAttribute('data-url'), this)" data-url="" class="flex-1 bg-emerald-900/40 border border-emerald-500/50 text-emerald-400 font-black py-3 rounded-xl text-xs tracking-wider uppercase text-center cursor-pointer transition active:scale-95">COPY URL</button>
+        <a id="lightboxDownloadBtn" href="#" target="_blank" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black py-3 rounded-xl text-xs tracking-wider uppercase text-center cursor-pointer transition shadow-lg active:scale-95 flex items-center justify-center gap-1">DOWNLOAD</a>
+      </div>
+    </div>
+
+    <!-- Engine Script Loaded Here -->
+    <script src="engine.js"></script>
+  </body>
+</html>
+
